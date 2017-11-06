@@ -78,7 +78,10 @@ public abstract class BaseChess : MonoBehaviour
     public void Eat(GameObject chess)
     {
         if (chess == gameObject)
+        {
+            EatEvent -= Eat;    //需要取消订阅事件，否则销毁物体后会空引用
             Killed();
+        }
     }
     /// <summary>
     /// 该棋子能移动的所有位置,返回的是平面二维坐标，如(0,0)、(3,5)、(6,6)等
