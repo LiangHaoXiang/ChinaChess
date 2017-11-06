@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public delegate void ChooseEventHandler();
+public delegate void EatEventHandler(GameObject chess);
+
 public enum 着法状态
 {
     到红方走,
@@ -21,12 +23,15 @@ public enum ChessState
 public abstract class BaseChess : MonoBehaviour
 {
     public static event ChooseEventHandler ChooseEvent;//选择本棋子事件，通知其他棋子为取消选择状态
+    public static event EatEventHandler EatEvent;
+
     protected ChessState chessState;    //棋子状态
 
     public virtual void Awake()
     {
         chessState = ChessState.idle;
         ChooseEvent += new ChooseEventHandler(CancelChoose);//订阅事件
+        EatEvent += new EatEventHandler(Eat);               //订阅吃事件
     }
     /// <summary>
     /// 移动
@@ -48,6 +53,15 @@ public abstract class BaseChess : MonoBehaviour
                 if (canMoveGrids[i].x - 30 <= Input.mousePosition.x && Input.mousePosition.x <= canMoveGrids[i].x + 30 &&
                     canMoveGrids[i].y - 27.5 <= Input.mousePosition.y && Input.mousePosition.y <= canMoveGrids[i].y + 27.5)
                 {
+                    //若点击位置存在其他棋子 且 是敌方棋子，那就是吃
+                    if (GameController.vector2Chesse.ContainsKey(canMovePoints[i]))
+                    {
+                        GameObject otherChess = GameController.vector2Chesse[canMovePoints[i]];
+                        if (otherChess.GetComponent<ChessCamp>().camp != GetComponent<ChessCamp>().camp)
+                        {
+                            EatEvent(otherChess);   //吃，有bug
+                        }
+                    }
                     iTween.MoveTo(gameObject, iTween.Hash("time", 0.1f, "position", canMoveGrids[i], 
                         "easetype", iTween.EaseType.linear));
                 }
@@ -61,7 +75,11 @@ public abstract class BaseChess : MonoBehaviour
     /// <summary>
     /// 吃
     /// </summary>
-    public abstract void Eat();
+    public void Eat(GameObject chess)
+    {
+        if (chess == gameObject)
+            Killed();
+    }
     /// <summary>
     /// 该棋子能移动的所有位置,返回的是平面二维坐标，如(0,0)、(3,5)、(6,6)等
     /// </summary>
@@ -74,6 +92,7 @@ public abstract class BaseChess : MonoBehaviour
         //播放音效
 
         //自行销毁
+        DestroyImmediate(gameObject);
     }
 
     /// <summary>

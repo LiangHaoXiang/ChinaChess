@@ -24,10 +24,6 @@ public class Chess_Ju : BaseChess
         }
     }
 
-    public override void Eat()
-    {
-
-    }
     /// <summary>
     /// 该棋子能移动的所有位置,返回的是平面二维坐标，如(0,0)、(3,5)、(6,6)等
     /// </summary>
