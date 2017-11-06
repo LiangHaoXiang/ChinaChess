@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum 着法状态
+{
+    到红方走,
+    到黑方走,
+}
 public class GameController : MonoBehaviour
 {
     #region 棋子预制体
@@ -33,6 +38,7 @@ public class GameController : MonoBehaviour
     public static Dictionary<Vector2, GameObject> vector2Grids;
 
     public static GameObject[] chesses;   //获取所有棋子
+    public static 着法状态 whoWalk;
 
     public static Dictionary<GameObject, Vector2> chesse2Vector;    //棋子与他现在二维坐标的映射
     public static Dictionary<Vector2, GameObject> vector2Chesse;    //棋子二维坐标与自身的映射
@@ -80,12 +86,16 @@ public class GameController : MonoBehaviour
     void Start ()
     {
         InitChessBoard();
+        whoWalk = 着法状态.到红方走;
+        UpdateChessGame();
     }
 	
 	void Update () {
 		
 	}
-
+    /// <summary>
+    /// 更新棋局
+    /// </summary>
     public static void UpdateChessGame()
     {
         if (chesse2Vector != null && vector2Chesse != null)
@@ -165,5 +175,20 @@ public class GameController : MonoBehaviour
         GameObject go = Instantiate(prefab);
         go.transform.parent = GameObject.Find("Chesses").transform;
         go.transform.position = vector2Grids[point].transform.position;
+    }
+    /// <summary>
+    /// 回合制 轮流走棋
+    /// </summary>
+    public static void TBS()
+    {
+        if(whoWalk == 着法状态.到红方走)
+        {
+            whoWalk = 着法状态.到黑方走;
+        }
+        else//到黑方走
+        {
+            whoWalk = 着法状态.到红方走;
+        }
+        UpdateChessGame();
     }
 }

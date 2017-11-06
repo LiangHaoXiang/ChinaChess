@@ -6,11 +6,6 @@ using UnityEngine.UI;
 public delegate void ChooseEventHandler();
 public delegate void EatEventHandler(GameObject chess);
 
-public enum 着法状态
-{
-    到红方走,
-    到黑方走,
-}
 /// <summary>
 /// 棋子状态
 /// </summary>
@@ -62,12 +57,12 @@ public abstract class BaseChess : MonoBehaviour
                             EatEvent(otherChess);   //吃，有bug
                         }
                     }
+                    //这里在移动的时候时间是0.1秒，这个时间段的状态改成moving状态，还需要改进，否则会有bug
                     iTween.MoveTo(gameObject, iTween.Hash("time", 0.1f, "position", canMoveGrids[i], 
                         "easetype", iTween.EaseType.linear));
+                    GameController.TBS();   //走完就换对方走棋并更新棋局
                 }
             }
-
-            //若走的位置上有敌方棋子，那么就认为是吃对方
 
             CancelChoose();
         }
@@ -103,14 +98,18 @@ public abstract class BaseChess : MonoBehaviour
     /// </summary>
     public void ChesseClicked()
     {
-        if (chessState == ChessState.idle)
+        if ((GameController.whoWalk == 着法状态.到红方走 && GetComponent<ChessCamp>().camp == Camp.Red) ||
+            (GameController.whoWalk == 着法状态.到黑方走 && GetComponent<ChessCamp>().camp == Camp.Black))
         {
-            ChooseEvent();
-            BeChoosed();
-        }
-        else if(chessState == ChessState.beChoosed)
-        {
-            CancelChoose();
+            if (chessState == ChessState.idle)
+            {
+                ChooseEvent();
+                BeChoosed();
+            }
+            else if (chessState == ChessState.beChoosed)
+            {
+                CancelChoose();
+            }
         }
     }
     /// <summary>
