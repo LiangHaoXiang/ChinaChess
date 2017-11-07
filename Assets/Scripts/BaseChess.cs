@@ -11,8 +11,8 @@ public delegate void EatEventHandler(GameObject chess);
 /// </summary>
 public enum ChessState
 {
-    beChoosed,
     idle,
+    beChoosed,
     moving,
 }
 public abstract class BaseChess : MonoBehaviour
@@ -27,6 +27,7 @@ public abstract class BaseChess : MonoBehaviour
         chessState = ChessState.idle;
         ChooseEvent += new ChooseEventHandler(CancelChoose);//订阅事件
         EatEvent += new EatEventHandler(Eat);               //订阅吃事件
+        GameController.ResetChessStateEvent += ResetChessState; //订阅重置棋子状态事件
     }
     /// <summary>
     /// 移动
@@ -58,9 +59,9 @@ public abstract class BaseChess : MonoBehaviour
                         }
                     }
                     //这里在移动的时候时间是0.1秒，这个时间段的状态改成moving状态，还需要改进，否则会有bug
-                    iTween.MoveTo(gameObject, iTween.Hash("time", 0.1f, "position", canMoveGrids[i], 
-                        "easetype", iTween.EaseType.linear));
-                    GameController.TBS();   //走完就换对方走棋并更新棋局
+                    chessState = ChessState.moving;
+                    iTween.MoveTo(gameObject, iTween.Hash("time", 0.1f, "position", canMoveGrids[i],
+                        "easetype", iTween.EaseType.linear, "oncomplete", "TBS", "oncompletetarget", GameObject.Find("GameController")));
                 }
             }
 
@@ -75,6 +76,8 @@ public abstract class BaseChess : MonoBehaviour
         if (chess == gameObject)
         {
             EatEvent -= Eat;    //需要取消订阅事件，否则销毁物体后会空引用
+            ChooseEvent -= CancelChoose;
+            GameController.ResetChessStateEvent -= ResetChessState;
             Killed();
         }
     }
@@ -106,7 +109,7 @@ public abstract class BaseChess : MonoBehaviour
                 ChooseEvent();
                 BeChoosed();
             }
-            else if (chessState == ChessState.beChoosed)
+            else
             {
                 CancelChoose();
             }
@@ -121,8 +124,8 @@ public abstract class BaseChess : MonoBehaviour
         transform.FindChild("白边").gameObject.SetActive(true);
 
         //棋子稍微上升
-        //这里先更新棋盘，测试用
-        GameController.UpdateChessGame();
+        ////这里先更新棋盘，测试用
+        //GameController.UpdateChessGame();
 
 
         //可以提示出该棋子能移动的所有位置
@@ -139,15 +142,20 @@ public abstract class BaseChess : MonoBehaviour
     /// </summary>
     public void CancelChoose()
     {
-        if (chessState == ChessState.beChoosed)
+        //将被选中时的所有变化还原
+        transform.FindChild("白边").gameObject.SetActive(false);
+        for (int i = 0; i < GameController.grids.Length; i++)
         {
-            //将被选中时的所有变化还原
-            transform.FindChild("白边").gameObject.SetActive(false);
-            for (int i = 0; i < GameController.grids.Length; i++)
-            {
-                GameObject.Find("Grids").transform.GetChild(i).GetComponent<Image>().enabled = false;
-            }
-            chessState = ChessState.idle;
+            GameObject.Find("Grids").transform.GetChild(i).GetComponent<Image>().enabled = false;
         }
+        chessState = ChessState.idle;
+    }
+    /// <summary>
+    /// 重置棋子状态
+    /// </summary>
+    public void ResetChessState()
+    {
+        if (chessState != ChessState.idle)
+            chessState = ChessState.idle;
     }
 }

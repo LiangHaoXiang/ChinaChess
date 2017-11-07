@@ -7,6 +7,9 @@ public enum 着法状态
     到红方走,
     到黑方走,
 }
+
+public delegate void ChessStateEventHandler();
+
 public class GameController : MonoBehaviour
 {
     #region 棋子预制体
@@ -39,6 +42,7 @@ public class GameController : MonoBehaviour
 
     public static GameObject[] chesses;   //获取所有棋子
     public static 着法状态 whoWalk;
+    public static event ChessStateEventHandler ResetChessStateEvent;
 
     public static Dictionary<GameObject, Vector2> chesse2Vector;    //棋子与他现在二维坐标的映射
     public static Dictionary<Vector2, GameObject> vector2Chesse;    //棋子二维坐标与自身的映射
@@ -179,7 +183,7 @@ public class GameController : MonoBehaviour
     /// <summary>
     /// 回合制 轮流走棋
     /// </summary>
-    public static void TBS()
+    public void TBS()
     {
         if(whoWalk == 着法状态.到红方走)
         {
@@ -189,6 +193,7 @@ public class GameController : MonoBehaviour
         {
             whoWalk = 着法状态.到红方走;
         }
+        ResetChessStateEvent();
         UpdateChessGame();
     }
 }
