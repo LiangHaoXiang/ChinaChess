@@ -16,12 +16,9 @@ public class Chess_Ju : BaseChess
 
 	}
 	
-	void Update ()
+	public override void Update ()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Move();
-        }
+        base.Update();
     }
 
     /// <summary>

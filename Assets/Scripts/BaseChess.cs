@@ -29,6 +29,14 @@ public abstract class BaseChess : MonoBehaviour
         EatEvent += new EatEventHandler(Eat);               //订阅吃事件
         GameController.ResetChessStateEvent += ResetChessState; //订阅重置棋子状态事件
     }
+
+    public virtual void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Move();
+        }
+    }
     /// <summary>
     /// 移动
     /// </summary>

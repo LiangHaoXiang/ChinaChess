@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224138970594504222}
   - component: {fileID: 114183165435891092}
-  - component: {fileID: 114694627908281506}
+  - component: {fileID: 114720566077103860}
   - component: {fileID: 114626699655689226}
   m_Layer: 5
   m_Name: "\u9ED1\u9A6C"
@@ -163,7 +163,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114694627908281506}
+      - m_Target: {fileID: 114720566077103860}
         m_MethodName: ChesseClicked
         m_Mode: 1
         m_Arguments:
@@ -269,7 +269,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camp: 1
---- !u!114 &114694627908281506
+--- !u!114 &114720566077103860
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -277,11 +277,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1015629010448386}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8173e61f0c39d2d4db16cb85c4261181, type: 3}
+  m_Script: {fileID: 11500000, guid: 6a92064420f32f34d99fa16938a249ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameController: {fileID: 1842232147196298, guid: 973c0f68d7cfd4146921121cae54f0cd,
-    type: 2}
 --- !u!222 &222410114892964992
 CanvasRenderer:
   m_ObjectHideFlags: 1
