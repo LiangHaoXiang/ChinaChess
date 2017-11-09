@@ -63,7 +63,7 @@ public abstract class BaseChess : MonoBehaviour
                         GameObject otherChess = GameController.vector2Chesse[canMovePoints[i]];
                         if (otherChess.GetComponent<ChessCamp>().camp != GetComponent<ChessCamp>().camp)
                         {
-                            EatEvent(otherChess);   //吃，有bug
+                            EatEvent(otherChess);   //吃
                         }
                     }
                     //这里在移动的时候时间是0.1秒，这个时间段的状态改成moving状态，还需要改进，否则会有bug
@@ -141,6 +141,11 @@ public abstract class BaseChess : MonoBehaviour
         for (int i = 0; i < canMovePoints.Length; i++)
         {
             GameController.vector2Grids[canMovePoints[i]].GetComponent<Image>().enabled = true;
+            //若可移动点上存在其他棋子，那肯定就是敌方棋子了，提示可以击杀之
+            if (GameController.vector2Chesse.ContainsKey(canMovePoints[i]))
+            {
+                GameController.vector2Chesse[canMovePoints[i]].transform.FindChild("被成为目标").gameObject.SetActive(true);
+            }
         }
         chessState = ChessState.beChoosed;
     }
@@ -155,6 +160,10 @@ public abstract class BaseChess : MonoBehaviour
         for (int i = 0; i < GameController.grids.Length; i++)
         {
             GameObject.Find("Grids").transform.GetChild(i).GetComponent<Image>().enabled = false;
+        }
+        for(int i = 0; i < GameController.chesses.Length; i++)
+        {
+            GameController.chesses[i].transform.FindChild("被成为目标").gameObject.SetActive(false);
         }
         chessState = ChessState.idle;
     }

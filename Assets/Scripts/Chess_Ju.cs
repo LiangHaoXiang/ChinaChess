@@ -27,7 +27,7 @@ public class Chess_Ju : BaseChess
     /// <returns></returns>
     public override List<Vector2> CanMovePoints()
     {
-        Vector2 currentPos = GameController.coords[transform.position];
+        Vector2 currentPos = GameController.chesse2Vector[gameObject];
 
         List<Vector2> sameX_points = new List<Vector2>();   //存储与本棋子相同x坐标(同列)的其他棋子
         List<Vector2> sameY_points = new List<Vector2>();   //存储与本棋子相同y坐标(同行)的其他棋子

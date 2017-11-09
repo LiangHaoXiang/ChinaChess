@@ -85,6 +85,9 @@ public class GameController : MonoBehaviour
                 vector2Grids.Add(new Vector2(j, i), GameObject.Find("Grids").transform.GetChild((9 - i) * 9 + j).gameObject);
             }
         }
+
+        chesse2Vector = new Dictionary<GameObject, Vector2>();//记得要定时清空
+        vector2Chesse = new Dictionary<Vector2, GameObject>();//记得要定时清空
     }
 
     void Start ()
@@ -110,8 +113,7 @@ public class GameController : MonoBehaviour
 
         int count = GameObject.Find("Chesses").transform.childCount;
         chesses = new GameObject[count];
-        chesse2Vector = new Dictionary<GameObject, Vector2>();//记得要定时清空
-        vector2Chesse = new Dictionary<Vector2, GameObject>();//记得要定时清空
+
         for (int i = 0; i < count; i++)
         {
             chesses[i] = GameObject.Find("Chesses").transform.GetChild(i).gameObject;//获取所有棋子

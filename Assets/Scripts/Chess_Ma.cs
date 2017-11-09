@@ -26,7 +26,7 @@ public class Chess_Ma : BaseChess
     /// <returns></returns>
     public override List<Vector2> CanMovePoints()
     {
-        Vector2 currentPos = GameController.coords[transform.position];
+        Vector2 currentPos = GameController.chesse2Vector[gameObject];
 
         bool stopHourseRight = false;   //在右边绊马脚
         bool stopHourseLeft = false;    //在左边绊马脚
