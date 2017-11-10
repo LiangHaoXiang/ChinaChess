@@ -183,7 +183,7 @@ public class GameController : MonoBehaviour
         go.transform.position = vector2Grids[point].transform.position;
     }
     /// <summary>
-    /// 回合制 轮流走棋
+    /// 回合制 轮流走棋 ，itween 运动完成后调用
     /// </summary>
     public void TBS()
     {
@@ -195,7 +195,8 @@ public class GameController : MonoBehaviour
         {
             whoWalk = 着法状态.到红方走;
         }
-        ResetChessStateEvent();
+
         UpdateChessGame();
+        ResetChessStateEvent();
     }
 }
