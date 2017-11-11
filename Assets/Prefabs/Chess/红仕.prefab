@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224138970594504222}
   - component: {fileID: 114183165435891092}
-  - component: {fileID: 114276632641144858}
+  - component: {fileID: 114505148700977678}
   - component: {fileID: 114674154291714658}
   m_Layer: 5
   m_Name: "\u7EA2\u4ED5"
@@ -180,7 +180,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114276632641144858}
+      - m_Target: {fileID: 114505148700977678}
         m_MethodName: ChesseClicked
         m_Mode: 1
         m_Arguments:
@@ -193,17 +193,6 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114276632641144858
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1015629010448386}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8173e61f0c39d2d4db16cb85c4261181, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114432507397248258
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -231,6 +220,17 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114505148700977678
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1015629010448386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caa4a8800be391341a0af8b46eafc5ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114565533862985600
 MonoBehaviour:
   m_ObjectHideFlags: 1
