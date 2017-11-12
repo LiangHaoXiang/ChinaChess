@@ -130,6 +130,27 @@ public class GameController : MonoBehaviour
     /// </summary>
     public void InitChessBoard()
     {
+        Create(black_Ju, 0, 9);                                 Create(black_Zu, 0, 6);
+
+        Create(black_Ma, 1, 9);     Create(black_Pao, 1, 7);
+
+        Create(black_Xiang, 2, 9);                              Create(black_Zu, 2, 6);
+
+        Create(black_Shi, 3, 9);
+
+        Create(black_Jiang, 4, 9);                              Create(black_Zu, 4, 6);
+
+        Create(black_Shi, 5, 9);
+
+        Create(black_Xiang, 6, 9);                              Create(black_Zu, 6, 6);
+
+        Create(black_Ma, 7, 9);     Create(black_Pao, 7, 7);
+
+        Create(black_Ju, 8, 9);                                 Create(black_Zu, 8, 6);
+
+
+
+
         Create(red_Ju, 0, 0);                                   Create(red_Bing, 0, 3);
 
         Create(red_Ma, 1, 0);         Create(red_Pao, 1, 2);
@@ -147,27 +168,6 @@ public class GameController : MonoBehaviour
         Create(red_Ma, 7, 0);         Create(red_Pao, 7, 2);
 
         Create(red_Ju, 8, 0);                                   Create(red_Bing, 8, 3);
-
-
-
-
-        Create(black_Ju, 0, 9);                                 Create(black_Zu, 0, 6);
-
-        Create(black_Ma, 1, 9);       Create(black_Pao, 1, 7);
-
-        Create(black_Xiang, 2, 9);                              Create(black_Zu, 2, 6);
-
-        Create(black_Shi, 3, 9);
-
-        Create(black_Jiang, 4, 9);                              Create(black_Zu, 4, 6);
-
-        Create(black_Shi, 5, 9);
-
-        Create(black_Xiang, 6, 9);                              Create(black_Zu, 6, 6);
-
-        Create(black_Ma, 7, 9);       Create(black_Pao, 7, 7);
-
-        Create(black_Ju, 8, 9);                                 Create(black_Zu, 8, 6);
     }
     /// <summary>
     /// 生成棋子
