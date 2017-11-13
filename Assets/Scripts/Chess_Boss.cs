@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public delegate bool BeAttackingEventHandler(); //被将军
 public class Chess_Boss : BaseChess
 {
+    public static event BeAttackingEventHandler BeAttackingEvent;   //被将军事件
     public override void Awake()
     {
         base.Awake();
@@ -18,6 +20,20 @@ public class Chess_Boss : BaseChess
     public override void Update()
     {
         base.Update();
+    }
+    /// <summary>
+    /// 提示被将军
+    /// </summary>
+    public static void TipsBeAttacking()
+    {
+        BeAttackingEvent();
+    }
+    /// <summary>
+    /// 被将死
+    /// </summary>
+    public void NoWayOut()
+    {
+
     }
 
     public override List<Vector2> CanMovePoints()

@@ -28,6 +28,7 @@ public abstract class BaseChess : MonoBehaviour
         ChooseEvent += new ChooseEventHandler(CancelChoose);//订阅事件
         EatEvent += new EatEventHandler(Eat);               //订阅吃事件
         GameController.ResetChessStateEvent += CancelChoose; //订阅重置棋子状态事件
+        Chess_Boss.BeAttackingEvent += JiangJun;            //订阅将军事件
     }
 
     public virtual void Update()
@@ -95,6 +96,7 @@ public abstract class BaseChess : MonoBehaviour
             EatEvent -= Eat;    //需要取消订阅事件，否则销毁物体后会空引用
             ChooseEvent -= CancelChoose;
             GameController.ResetChessStateEvent -= CancelChoose;
+            Chess_Boss.BeAttackingEvent -= JiangJun;            
             Killed();
         }
     }
@@ -111,6 +113,36 @@ public abstract class BaseChess : MonoBehaviour
 
         //自行销毁
         DestroyImmediate(gameObject);
+    }
+    /// <summary>
+    /// 将军
+    /// </summary>
+    public bool JiangJun()
+    {
+        Vector2[] canMovePoints = CanMovePoints().ToArray();
+        if (GetComponent<ChessCamp>().camp == Camp.Red)
+        {
+            for (int i = 0; i < canMovePoints.Length; i++)
+            {
+                if (canMovePoints[i] == GameController.chesse2Vector[GameController.GetBlackBoss()])
+                {
+                    Debug.Log("将军，黑方注意");
+                    return true;
+                }
+            }
+        }
+        if (GetComponent<ChessCamp>().camp == Camp.Black)
+        {
+            for (int i = 0; i < canMovePoints.Length; i++)
+            {
+                if (canMovePoints[i] == GameController.chesse2Vector[GameController.GetRedBoss()])
+                {
+                    Debug.Log("将军，红方注意");
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /// <summary>

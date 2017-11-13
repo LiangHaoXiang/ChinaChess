@@ -47,6 +47,9 @@ public class GameController : MonoBehaviour
     public static Dictionary<GameObject, Vector2> chesse2Vector;    //棋子与他现在二维坐标的映射
     public static Dictionary<Vector2, GameObject> vector2Chesse;    //棋子二维坐标与自身的映射
 
+    public static GameObject redBoss;
+    public static GameObject blackBoss;
+
     void Awake()
     {
         //初始化场景网格点，获取场景中的每个排列好的网格点
@@ -82,12 +85,12 @@ public class GameController : MonoBehaviour
         {
             for(int j = 0; j < 9; j++)
             {
-                vector2Grids.Add(new Vector2(j, i), GameObject.Find("Grids").transform.GetChild((9 - i) * 9 + j).gameObject);
+                vector2Grids.Add(points[i, j], GameObject.Find("Grids").transform.GetChild((9 - i) * 9 + j).gameObject);
             }
         }
 
-        chesse2Vector = new Dictionary<GameObject, Vector2>();//记得要定时清空
-        vector2Chesse = new Dictionary<Vector2, GameObject>();//记得要定时清空
+        chesse2Vector = new Dictionary<GameObject, Vector2>();
+        vector2Chesse = new Dictionary<Vector2, GameObject>();
     }
 
     void Start ()
@@ -138,7 +141,7 @@ public class GameController : MonoBehaviour
 
         Create(black_Shi, 3, 9);
 
-        Create(black_Jiang, 4, 9);                              Create(black_Zu, 4, 6);
+        blackBoss = Create(black_Jiang, 4, 9);                  Create(black_Zu, 4, 6);
 
         Create(black_Shi, 5, 9);
 
@@ -159,7 +162,7 @@ public class GameController : MonoBehaviour
 
         Create(red_Shi, 3, 0);
 
-        Create(red_Shuai, 4, 0);                                Create(red_Bing, 4, 3);
+        redBoss = Create(red_Shuai, 4, 0);                      Create(red_Bing, 4, 3);
 
         Create(red_Shi, 5, 0);
 
@@ -168,6 +171,7 @@ public class GameController : MonoBehaviour
         Create(red_Ma, 7, 0);         Create(red_Pao, 7, 2);
 
         Create(red_Ju, 8, 0);                                   Create(red_Bing, 8, 3);
+
     }
     /// <summary>
     /// 生成棋子
@@ -175,12 +179,13 @@ public class GameController : MonoBehaviour
     /// <param name="prefab"></param>
     /// <param name="point_X"></param>
     /// <param name="point_Y"></param>
-    private void Create(GameObject prefab, int point_X, int point_Y)
+    private GameObject Create(GameObject prefab, int point_X, int point_Y)
     {
         Vector2 point = new Vector2(point_X, point_Y);
         GameObject go = Instantiate(prefab);
         go.transform.parent = GameObject.Find("Chesses").transform;
         go.transform.position = vector2Grids[point].transform.position;
+        return go;
     }
     /// <summary>
     /// 回合制 轮流走棋 ，itween 运动完成后调用
@@ -198,5 +203,21 @@ public class GameController : MonoBehaviour
 
         UpdateChessGame();
         ResetChessStateEvent();
+        Chess_Boss.TipsBeAttacking();
+    }
+
+    /// <summary>
+    /// 返回红帅棋子
+    /// </summary>
+    public static GameObject GetRedBoss()
+    {
+        return redBoss;
+    }
+    /// <summary>
+    /// 返回黑将棋子
+    /// </summary>
+    public static GameObject GetBlackBoss()
+    {
+        return blackBoss;
     }
 }
