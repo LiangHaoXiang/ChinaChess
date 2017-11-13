@@ -46,12 +46,12 @@ public class Chess_Boss : BaseChess
             if (currentPos.y <= 1)  //可向上走
             {
                 Vector2 value = new Vector2(currentPos.x, currentPos.y + 1);
-                JudgeMovePoint(value, canMovePoints);
+                JudgeMovePoint(value, canMovePoints, gameObject);
             }
             if (currentPos.y >= 1)  //可向下走
             {
                 Vector2 value = new Vector2(currentPos.x, currentPos.y - 1);
-                JudgeMovePoint(value, canMovePoints);
+                JudgeMovePoint(value, canMovePoints, gameObject);
             }
         }
         if (GetComponent<ChessCamp>().camp == Camp.Black)
@@ -59,24 +59,25 @@ public class Chess_Boss : BaseChess
             if (currentPos.y <= 8)  //可向上走
             {
                 Vector2 value = new Vector2(currentPos.x, currentPos.y + 1);
-                JudgeMovePoint(value, canMovePoints);
+                JudgeMovePoint(value, canMovePoints, gameObject);
             }
             if (currentPos.y >= 8)  //可向下走
             {
                 Vector2 value = new Vector2(currentPos.x, currentPos.y - 1);
-                JudgeMovePoint(value, canMovePoints);
+                JudgeMovePoint(value, canMovePoints, gameObject);
             }
         }
 
         if (currentPos.x <= 4)  //可向右走
         {
             Vector2 value = new Vector2(currentPos.x + 1, currentPos.y);
-            JudgeMovePoint(value, canMovePoints);
+            JudgeMovePoint(value, canMovePoints, gameObject);
         }
-        if (currentPos.x >= 4)  //可向右走
+
+        if (currentPos.x >= 4)  //可向左走
         {
             Vector2 value = new Vector2(currentPos.x - 1, currentPos.y);
-            JudgeMovePoint(value, canMovePoints);
+            JudgeMovePoint(value, canMovePoints, gameObject);
         }
 
         return canMovePoints;
@@ -86,18 +87,65 @@ public class Chess_Boss : BaseChess
     /// 帅/将专属判断是否可以走这个点
     /// </summary>
     /// <param name="value"></param>
-    void JudgeMovePoint(Vector2 value, List<Vector2> canMovePoints)
+    void JudgeMovePoint(Vector2 value, List<Vector2> canMovePoints, GameObject self)
     {
+        GameObject enemyBoss;
+        if (self == GameController.redBoss)
+            enemyBoss = GameController.blackBoss;
+        else
+            enemyBoss = GameController.redBoss;
+
         if (GameController.vector2Grids.ContainsKey(value))
         {
-            if (GameController.vector2Chesse.ContainsKey(value))
+            //不管value处有没有棋子，先判断value是否和敌方公照面
+            bool existOtherChessOnSame_X_Axis = false;   //在公想要走的位置和对面公的位置之间是否有其他棋子
+            //若想要走的位置和对面公同一条竖线，那要判断是否照面
+            if (value.x == GameController.chesse2Vector[enemyBoss].x)
             {
-                GameObject otherChess = GameController.vector2Chesse[value];
-                if (otherChess.GetComponent<ChessCamp>().camp != GetComponent<ChessCamp>().camp)
-                    canMovePoints.Add(value);
+                float enemyBoss_Y = GameController.chesse2Vector[enemyBoss].y;
+                if (enemyBoss == GameController.blackBoss)
+                {
+                    for (int i = (int)value.y + 1; i < enemyBoss_Y; i++)
+                    {
+                        if (GameController.vector2Chesse.ContainsKey(new Vector2(value.x, i)))
+                            existOtherChessOnSame_X_Axis = true;
+                    }
+                }
+                else if(enemyBoss == GameController.redBoss)
+                {
+                    for (int i = (int)value.y - 1; i > enemyBoss_Y; i--)
+                    {
+                        if (GameController.vector2Chesse.ContainsKey(new Vector2(value.x, i)))
+                            existOtherChessOnSame_X_Axis = true;
+                    }
+                }
+                if (existOtherChessOnSame_X_Axis)
+                {
+                    //判断value位置是否有棋子
+                    if (GameController.vector2Chesse.ContainsKey(value))
+                    {
+                        GameObject otherChess = GameController.vector2Chesse[value];
+                        //判断value位置的棋子阵营
+                        if (otherChess.GetComponent<ChessCamp>().camp != GetComponent<ChessCamp>().camp)
+                            canMovePoints.Add(value);
+                    }
+                    else
+                        canMovePoints.Add(value);
+                }
             }
             else
-                canMovePoints.Add(value);
+            {
+                //判断value位置是否有棋子
+                if (GameController.vector2Chesse.ContainsKey(value))
+                {
+                    GameObject otherChess = GameController.vector2Chesse[value];
+                    //判断value位置的棋子阵营
+                    if (otherChess.GetComponent<ChessCamp>().camp != GetComponent<ChessCamp>().camp)
+                        canMovePoints.Add(value);
+                }
+                else
+                    canMovePoints.Add(value);
+            }
         }
     }
 
