@@ -19,11 +19,12 @@ public abstract class BaseChess : MonoBehaviour
 {
     public static event ChooseEventHandler ChooseEvent;//选择本棋子事件，通知其他棋子为取消选择状态
     public static event EatEventHandler EatEvent;
-
+    protected CreateManager createManager;
     protected ChessState chessState;    //棋子状态
 
     public virtual void Awake()
     {
+        createManager = GameObject.Find("CreateManager").GetComponent<CreateManager>();
         chessState = ChessState.idle;
         ChooseEvent += new ChooseEventHandler(CancelChoose);//订阅事件
         EatEvent += new EatEventHandler(Eat);               //订阅吃事件
@@ -119,12 +120,13 @@ public abstract class BaseChess : MonoBehaviour
     /// </summary>
     public bool JiangJun()
     {
+        //就是判断当前可移动的点包含将军的位置
         Vector2[] canMovePoints = CanMovePoints().ToArray();
         if (GetComponent<ChessCamp>().camp == Camp.Red)
         {
             for (int i = 0; i < canMovePoints.Length; i++)
             {
-                if (canMovePoints[i] == GameController.chesse2Vector[GameController.GetBlackBoss()])
+                if (canMovePoints[i] == GameController.chesse2Vector[createManager.GetBlackBoss()])
                 {
                     Debug.Log("将军，黑方注意");
                     return true;
@@ -135,7 +137,7 @@ public abstract class BaseChess : MonoBehaviour
         {
             for (int i = 0; i < canMovePoints.Length; i++)
             {
-                if (canMovePoints[i] == GameController.chesse2Vector[GameController.GetRedBoss()])
+                if (canMovePoints[i] == GameController.chesse2Vector[createManager.GetRedBoss()])
                 {
                     Debug.Log("将军，红方注意");
                     return true;

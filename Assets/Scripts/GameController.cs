@@ -12,23 +12,6 @@ public delegate void ChessStateEventHandler();
 
 public class GameController : MonoBehaviour
 {
-    #region 棋子预制体
-    public GameObject red_Ju;
-    public GameObject red_Ma;
-    public GameObject red_Pao;
-    public GameObject red_Shi;
-    public GameObject red_Xiang;
-    public GameObject red_Bing;
-    public GameObject red_Shuai;
-
-    public GameObject black_Ju;
-    public GameObject black_Ma;
-    public GameObject black_Pao;
-    public GameObject black_Shi;
-    public GameObject black_Xiang;
-    public GameObject black_Zu;
-    public GameObject black_Jiang;
-    #endregion
     public static Vector3[,] grids;
     public static Vector2[,] points;
     /// <summary>
@@ -47,11 +30,20 @@ public class GameController : MonoBehaviour
     public static Dictionary<GameObject, Vector2> chesse2Vector;    //棋子与他现在二维坐标的映射
     public static Dictionary<Vector2, GameObject> vector2Chesse;    //棋子二维坐标与自身的映射
 
-    public static GameObject redBoss;
-    public static GameObject blackBoss;
+    private CreateManager createManager;
+
+    private static GameController instance = null;
+    public static GameController Instance()
+    {
+        if (instance == null)
+            instance = new GameController();
+        return instance;
+    }
 
     void Awake()
     {
+        if (instance == null)
+            instance = new GameController();
         //初始化场景网格点，获取场景中的每个排列好的网格点
         grids = new Vector3[10, 9];
         for (int i = 0; i < 10; i++)
@@ -91,11 +83,13 @@ public class GameController : MonoBehaviour
 
         chesse2Vector = new Dictionary<GameObject, Vector2>();
         vector2Chesse = new Dictionary<Vector2, GameObject>();
+
+        createManager = GetComponentInChildren<CreateManager>();
     }
 
     void Start ()
     {
-        InitChessBoard();
+        createManager.InitChessBoard();
         whoWalk = 着法状态.到红方走;
         UpdateChessGame();
     }
@@ -128,65 +122,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 初始化棋盘所有棋子
-    /// </summary>
-    public void InitChessBoard()
-    {
-        Create(black_Ju, 0, 9);                                 Create(black_Zu, 0, 6);
 
-        Create(black_Ma, 1, 9);     Create(black_Pao, 1, 7);
-
-        Create(black_Xiang, 2, 9);                              Create(black_Zu, 2, 6);
-
-        Create(black_Shi, 3, 9);
-
-        blackBoss = Create(black_Jiang, 4, 9);                  Create(black_Zu, 4, 6);
-
-        Create(black_Shi, 5, 9);
-
-        Create(black_Xiang, 6, 9);                              Create(black_Zu, 6, 6);
-
-        Create(black_Ma, 7, 9);     Create(black_Pao, 7, 7);
-
-        Create(black_Ju, 8, 9);                                 Create(black_Zu, 8, 6);
-
-
-
-
-        Create(red_Ju, 0, 0);                                   Create(red_Bing, 0, 3);
-
-        Create(red_Ma, 1, 0);         Create(red_Pao, 1, 2);
-
-        Create(red_Xiang, 2, 0);                                Create(red_Bing, 2, 3);
-
-        Create(red_Shi, 3, 0);
-
-        redBoss = Create(red_Shuai, 4, 0);                      Create(red_Bing, 4, 3);
-
-        Create(red_Shi, 5, 0);
-
-        Create(red_Xiang, 6, 0);                                Create(red_Bing, 6, 3);
-
-        Create(red_Ma, 7, 0);         Create(red_Pao, 7, 2);
-
-        Create(red_Ju, 8, 0);                                   Create(red_Bing, 8, 3);
-
-    }
-    /// <summary>
-    /// 生成棋子
-    /// </summary>
-    /// <param name="prefab"></param>
-    /// <param name="point_X"></param>
-    /// <param name="point_Y"></param>
-    private GameObject Create(GameObject prefab, int point_X, int point_Y)
-    {
-        Vector2 point = new Vector2(point_X, point_Y);
-        GameObject go = Instantiate(prefab);
-        go.transform.parent = GameObject.Find("Chesses").transform;
-        go.transform.position = vector2Grids[point].transform.position;
-        return go;
-    }
     /// <summary>
     /// 回合制 轮流走棋 ，itween 运动完成后调用
     /// </summary>
@@ -204,20 +140,5 @@ public class GameController : MonoBehaviour
         UpdateChessGame();
         ResetChessStateEvent();
         Chess_Boss.TipsBeAttacking();
-    }
-
-    /// <summary>
-    /// 返回红帅棋子
-    /// </summary>
-    public static GameObject GetRedBoss()
-    {
-        return redBoss;
-    }
-    /// <summary>
-    /// 返回黑将棋子
-    /// </summary>
-    public static GameObject GetBlackBoss()
-    {
-        return blackBoss;
     }
 }

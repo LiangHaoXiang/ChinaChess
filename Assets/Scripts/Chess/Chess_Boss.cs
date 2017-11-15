@@ -31,9 +31,34 @@ public class Chess_Boss : BaseChess
     /// <summary>
     /// 被将死
     /// </summary>
-    public void NoWayOut()
+    public bool NoWayOut()
     {
+        //如果是正在被将军的时候，
+        if (BeAttackingEvent() == true)
+        {
+#region 不太对
+            //将军可移动点数为0，就算将死
+            if (CanMovePoints().Count == 0)
+                return true;
 
+            //或将军所有能走的点都存在敌方能走的位置，也算将死
+            Vector2[] canMovePoints = CanMovePoints().ToArray();
+            int isAllExist = 0;
+            //for (int i = 0; i < canMovePoints.Length; i++)
+            //{
+            //    //如果存在
+            //    if(canMovePoints[i]==)
+            //    isAllExist++;
+            //}
+            if (isAllExist == canMovePoints.Length)
+                return true;
+            else
+                return false;
+#endregion
+            //若无论下一步怎么走都还无法避免正在被将军的状态，那就认为是将死军
+        }
+        else
+            return false;
     }
 
     public override List<Vector2> CanMovePoints()
@@ -90,10 +115,10 @@ public class Chess_Boss : BaseChess
     void JudgeMovePoint(Vector2 value, List<Vector2> canMovePoints, GameObject self)
     {
         GameObject enemyBoss;
-        if (self == GameController.redBoss)
-            enemyBoss = GameController.blackBoss;
+        if (self == createManager.redBoss)
+            enemyBoss = createManager.blackBoss;
         else
-            enemyBoss = GameController.redBoss;
+            enemyBoss = createManager.redBoss;
 
         if (GameController.vector2Grids.ContainsKey(value))
         {
@@ -103,7 +128,7 @@ public class Chess_Boss : BaseChess
             if (value.x == GameController.chesse2Vector[enemyBoss].x)
             {
                 float enemyBoss_Y = GameController.chesse2Vector[enemyBoss].y;
-                if (enemyBoss == GameController.blackBoss)
+                if (enemyBoss == createManager.blackBoss)
                 {
                     for (int i = (int)value.y + 1; i < enemyBoss_Y; i++)
                     {
@@ -111,7 +136,7 @@ public class Chess_Boss : BaseChess
                             existOtherChessOnSame_X_Axis = true;
                     }
                 }
-                else if(enemyBoss == GameController.redBoss)
+                else if(enemyBoss == createManager.redBoss)
                 {
                     for (int i = (int)value.y - 1; i > enemyBoss_Y; i--)
                     {
