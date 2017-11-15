@@ -33,17 +33,15 @@ public class GameController : MonoBehaviour
     private CreateManager createManager;
 
     private static GameController instance = null;
-    public static GameController Instance()
+    public static GameController Instance
     {
-        if (instance == null)
-            instance = new GameController();
-        return instance;
+        get { return instance; }
     }
 
     void Awake()
     {
         if (instance == null)
-            instance = new GameController();
+            instance = this;
         //初始化场景网格点，获取场景中的每个排列好的网格点
         grids = new Vector3[10, 9];
         for (int i = 0; i < 10; i++)
@@ -90,6 +88,7 @@ public class GameController : MonoBehaviour
     void Start ()
     {
         createManager.InitChessBoard();
+        //CreateManager.Instance.InitChessBoard();
         whoWalk = 着法状态.到红方走;
         UpdateChessGame();
     }

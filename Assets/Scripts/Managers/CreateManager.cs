@@ -88,19 +88,12 @@ public class CreateManager : MonoBehaviour
     public GameObject b_Bing5;
     #endregion
     private static CreateManager instance = null;
-    public static CreateManager Instance()
-    {
-        if (instance == null)
-            instance = new CreateManager();
-        return instance;
-    }
+    public static CreateManager Instance { get { return instance; } }
 
     void Awake()
     {
         if (instance == null)
-            instance = new CreateManager();
-
-
+            instance = this;
     }
     /// <summary>
     /// 初始化棋盘所有棋子
