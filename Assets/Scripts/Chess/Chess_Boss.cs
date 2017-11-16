@@ -33,31 +33,33 @@ public class Chess_Boss : BaseChess
     /// </summary>
     public bool NoWayOut()
     {
-        //如果是正在被将军的时候，
-        if (BeAttackingEvent() == true)
-        {
-#region 不太对
-            //将军可移动点数为0，就算将死
-            if (CanMovePoints().Count == 0)
-                return true;
+        #region 不太对
+        ////如果是正在被将军的时候，
+        //if (BeAttackingEvent() == true)
+        //{
 
-            //或将军所有能走的点都存在敌方能走的位置，也算将死
-            Vector2[] canMovePoints = CanMovePoints().ToArray();
-            int isAllExist = 0;
-            //for (int i = 0; i < canMovePoints.Length; i++)
-            //{
-            //    //如果存在
-            //    if(canMovePoints[i]==)
-            //    isAllExist++;
-            //}
-            if (isAllExist == canMovePoints.Length)
-                return true;
-            else
-                return false;
-#endregion
-            //若无论下一步怎么走都还无法避免正在被将军的状态，那就认为是将死军
-        }
-        else
+        //    //将军可移动点数为0，就算将死
+        //    if (CanMovePoints().Count == 0)
+        //        return true;
+
+        //    //或将军所有能走的点都存在敌方能走的位置，也算将死
+        //    Vector2[] canMovePoints = CanMovePoints().ToArray();
+        //    int isAllExist = 0;
+        //    //for (int i = 0; i < canMovePoints.Length; i++)
+        //    //{
+        //    //    //如果存在
+        //    //    if(canMovePoints[i]==)
+        //    //    isAllExist++;
+        //    //}
+        //    if (isAllExist == canMovePoints.Length)
+        //        return true;
+        //    else
+        //        return false;
+
+        //    //若无论下一步怎么走都还无法避免正在被将军的状态，那就认为是将死军
+        //}
+        //else
+        #endregion
             return false;
     }
 

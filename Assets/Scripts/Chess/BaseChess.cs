@@ -7,28 +7,40 @@ public delegate void ChooseEventHandler();
 public delegate void EatEventHandler(GameObject chess);
 
 /// <summary>
-/// 棋子状态
+/// 棋子交互状态
 /// </summary>
-public enum ChessState
+public enum ChessReciprocalState
 {
-    idle,
-    beChoosed,
-    moving,
+    unChoosed,      //未被选择状态
+    beChoosed,      //被选择中
+    moving,         //移动中
+}
+/// <summary>
+/// 棋子所处的情境状态
+/// </summary>
+public enum ChessSituationState
+{
+    Idle,           //安然无恙
+    Attacking,      //将军状态
+    BeAttacked,     //只有帅/将才拥有的被将军状态
+    NoWayOut,       //无路可走状态
 }
 public abstract class BaseChess : MonoBehaviour
 {
     public static event ChooseEventHandler ChooseEvent;//选择本棋子事件，通知其他棋子为取消选择状态
     public static event EatEventHandler EatEvent;
     protected CreateManager createManager;
-    protected ChessState chessState;    //棋子状态
+    protected ChessReciprocalState chessReciprocalState;    //棋子交互状态
+    protected ChessSituationState chessSituationState;      //棋子形势状态
 
     public virtual void Awake()
     {
         createManager = GameObject.Find("CreateManager").GetComponent<CreateManager>();
-        chessState = ChessState.idle;
+        chessReciprocalState = ChessReciprocalState.unChoosed;
+        chessSituationState = ChessSituationState.Idle;
         ChooseEvent += new ChooseEventHandler(CancelChoose);//订阅事件
         EatEvent += new EatEventHandler(Eat);               //订阅吃事件
-        GameController.ResetChessStateEvent += CancelChoose; //订阅重置棋子状态事件
+        GameController.ResetChessReciprocalStateEvent += CancelChoose; //订阅重置棋子状态事件
         Chess_Boss.BeAttackingEvent += JiangJun;            //订阅将军事件
     }
 
@@ -44,7 +56,7 @@ public abstract class BaseChess : MonoBehaviour
     /// </summary>
     public void Move()
     {
-        if (chessState == ChessState.beChoosed)
+        if (chessReciprocalState == ChessReciprocalState.beChoosed)
         {
             Vector2[] canMovePoints = CanMovePoints().ToArray();
             Vector3[] canMoveGrids = new Vector3[canMovePoints.Length];
@@ -71,11 +83,11 @@ public abstract class BaseChess : MonoBehaviour
                             }
                         }
 
-                        chessState = ChessState.moving;//这里在移动的时候时间是0.1秒，这个时间段的状态改成moving状态，还需要改进，否则会有bug
+                        chessReciprocalState = ChessReciprocalState.moving;//这里在移动的时候时间是0.1秒，这个时间段的状态改成moving状态，还需要改进，否则会有bug
                         iTween.MoveTo(gameObject, iTween.Hash("time", 0.1f, "position", canMoveGrids[i],
                             "easetype", iTween.EaseType.linear, "oncomplete", "TBS", "oncompletetarget", GameObject.Find("GameController")));
                     }
-                    else if (chessState != ChessState.moving)
+                    else if (chessReciprocalState != ChessReciprocalState.moving)
                     {
                         CancelChoose();
                     }
@@ -96,7 +108,7 @@ public abstract class BaseChess : MonoBehaviour
         {
             EatEvent -= Eat;    //需要取消订阅事件，否则销毁物体后会空引用
             ChooseEvent -= CancelChoose;
-            GameController.ResetChessStateEvent -= CancelChoose;
+            GameController.ResetChessReciprocalStateEvent -= CancelChoose;
             Chess_Boss.BeAttackingEvent -= JiangJun;            
             Killed();
         }
@@ -155,7 +167,7 @@ public abstract class BaseChess : MonoBehaviour
         if ((GameController.whoWalk == 着法状态.到红方走 && GetComponent<ChessCamp>().camp == Camp.Red) ||
             (GameController.whoWalk == 着法状态.到黑方走 && GetComponent<ChessCamp>().camp == Camp.Black))
         {
-            if (chessState == ChessState.idle)
+            if (chessReciprocalState == ChessReciprocalState.unChoosed)
             {
                 ChooseEvent();
                 BeChoosed();
@@ -187,7 +199,7 @@ public abstract class BaseChess : MonoBehaviour
                 GameController.vector2Chesse[canMovePoints[i]].transform.FindChild("被成为目标").gameObject.SetActive(true);
             }
         }
-        chessState = ChessState.beChoosed;
+        chessReciprocalState = ChessReciprocalState.beChoosed;
     }
 
     /// <summary>
@@ -206,10 +218,10 @@ public abstract class BaseChess : MonoBehaviour
     /// <summary>
     /// 重置棋子状态
     /// </summary>
-    public void ResetChessState()
+    public void ResetChessReciprocalState()
     {
-        if (chessState != ChessState.idle)
-            chessState = ChessState.idle;
+        if (chessReciprocalState != ChessReciprocalState.unChoosed)
+            chessReciprocalState = ChessReciprocalState.unChoosed;
     }
 
     protected void Reset()
@@ -219,6 +231,6 @@ public abstract class BaseChess : MonoBehaviour
         {
             GameObject.Find("Grids").transform.GetChild(i).GetComponent<Image>().enabled = false;
         }
-        ResetChessState();
+        ResetChessReciprocalState();
     }
 }

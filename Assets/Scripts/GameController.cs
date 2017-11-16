@@ -8,7 +8,7 @@ public enum 着法状态
     到黑方走,
 }
 
-public delegate void ChessStateEventHandler();
+public delegate void ChessReciprocalStateEventHandler();
 
 public class GameController : MonoBehaviour
 {
@@ -25,7 +25,7 @@ public class GameController : MonoBehaviour
 
     public static GameObject[] chesses;   //获取所有棋子
     public static 着法状态 whoWalk;
-    public static event ChessStateEventHandler ResetChessStateEvent;
+    public static event ChessReciprocalStateEventHandler ResetChessReciprocalStateEvent;
 
     public static Dictionary<GameObject, Vector2> chesse2Vector;    //棋子与他现在二维坐标的映射
     public static Dictionary<Vector2, GameObject> vector2Chesse;    //棋子二维坐标与自身的映射
@@ -137,7 +137,7 @@ public class GameController : MonoBehaviour
         }
 
         UpdateChessGame();
-        ResetChessStateEvent();
+        ResetChessReciprocalStateEvent();
         Chess_Boss.TipsBeAttacking();
     }
 }
