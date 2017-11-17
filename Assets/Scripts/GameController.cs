@@ -38,7 +38,6 @@ public class GameController : MonoBehaviour
     void Start ()
     {
         createManager.InitChessBoard();
-        //CreateManager.Instance.InitChessBoard();
         whoWalk = 着法状态.到红方走;
         UpdateChessGame();
     }
@@ -51,8 +50,8 @@ public class GameController : MonoBehaviour
     /// </summary>
     public static void UpdateChessGame()
     {
-        CalculateUtil.UpdateChessGame();
-        maps.Add(CalculateUtil.vector2Chesse);
+        CalculateUtil.UpdateChessData();        //更新棋局
+        maps.Add(CalculateUtil.vector2Chesse);  //添加棋谱
     }
     /// <summary>
     /// 回合制 轮流走棋 ，itween 运动完成后调用

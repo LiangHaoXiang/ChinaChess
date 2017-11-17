@@ -17,9 +17,14 @@ public class CalculateUtil : MonoBehaviour
     /// 二维坐标与场景中的网格点物体的映射
     /// </summary>
     public static Dictionary<Vector2, GameObject> vector2Grids;
-
-    public static Dictionary<GameObject, Vector2> chesse2Vector;    //棋子与他现在二维坐标的映射
-    public static Dictionary<Vector2, GameObject> vector2Chesse;    //棋子二维坐标与自身的映射
+    /// <summary>
+    /// 棋子与他现在二维坐标的映射
+    /// </summary>
+    public static Dictionary<GameObject, Vector2> chesse2Vector;
+    /// <summary>
+    /// 棋子二维坐标与自身的映射
+    /// </summary>
+    public static Dictionary<Vector2, GameObject> vector2Chesse;
 
     void Awake()
     {
@@ -68,7 +73,7 @@ public class CalculateUtil : MonoBehaviour
     /// 获取当前棋局信息
     /// </summary>
     /// <returns></returns>
-    public static void UpdateChessGame()
+    public static void UpdateChessData()
     {
         if (chesse2Vector != null && vector2Chesse != null)
         {
