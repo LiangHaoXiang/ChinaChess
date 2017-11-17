@@ -7,7 +7,6 @@ using UnityEngine;
 public class CalculateUtil
 {
     private static CalculateUtil instance = null;
-
     public static CalculateUtil Instance()
     {
         if (instance == null)
@@ -165,4 +164,30 @@ public class CalculateUtil
 
         return allMoves;
     }
+    /// <summary>
+    /// 获取当前棋局信息
+    /// </summary>
+    /// <returns></returns>
+    //public Dictionary<Vector2,GameObject> Map(GameObject[] chesses,
+    //    Dictionary<GameObject, Vector2> chesse2Vector,
+    //    Dictionary<Vector2, GameObject> vector2Chesse,
+    //    Dictionary<Vector3, Vector2> coords)
+    //{
+    //    Dictionary<Vector2, GameObject> map = new Dictionary<Vector2, GameObject>();
+
+    //    int count = GameObject.Find("Chesses").transform.childCount;
+    //    chesses = new GameObject[count];
+
+    //    for (int i = 0; i < count; i++)
+    //    {
+    //        chesses[i] = GameObject.Find("Chesses").transform.GetChild(i).gameObject;//获取所有棋子
+    //    }
+    //    for (int i = 0; i < count; i++)
+    //    {
+    //        chesse2Vector.Add(chesses[i], coords[chesses[i].transform.position]);
+    //        vector2Chesse.Add(coords[chesses[i].transform.position], chesses[i]);
+    //    }
+    //    map = vector2Chesse;
+    //    return map;
+    //}
 }

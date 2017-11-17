@@ -29,6 +29,10 @@ public class GameController : MonoBehaviour
 
     public static Dictionary<GameObject, Vector2> chesse2Vector;    //棋子与他现在二维坐标的映射
     public static Dictionary<Vector2, GameObject> vector2Chesse;    //棋子二维坐标与自身的映射
+    /// <summary>
+    /// 记录每走一步的所有棋局信息
+    /// </summary>
+    public static List<Dictionary<Vector2, GameObject>> maps;
 
     private CreateManager createManager;
 
@@ -81,6 +85,7 @@ public class GameController : MonoBehaviour
 
         chesse2Vector = new Dictionary<GameObject, Vector2>();
         vector2Chesse = new Dictionary<Vector2, GameObject>();
+        maps = new List<Dictionary<Vector2, GameObject>>();
 
         createManager = GetComponentInChildren<CreateManager>();
     }
@@ -119,6 +124,7 @@ public class GameController : MonoBehaviour
             chesse2Vector.Add(chesses[i], coords[chesses[i].transform.position]);
             vector2Chesse.Add(coords[chesses[i].transform.position], chesses[i]);
         }
+        maps.Add(vector2Chesse);
     }
 
 
