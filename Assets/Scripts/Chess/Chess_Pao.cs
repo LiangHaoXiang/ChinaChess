@@ -22,7 +22,7 @@ public class Chess_Pao : BaseChess
 
     public override List<Vector2> CanMovePoints()
     {
-        Vector2 currentPos = GameController.chesse2Vector[gameObject];
+        Vector2 currentPos = CalculateUtil.chesse2Vector[gameObject];
         List<Vector2> canMovePoints = new List<Vector2>();
 
         bool findFirstLeftOtherChess = false;
@@ -73,16 +73,16 @@ public class Chess_Pao : BaseChess
     {
         if (findFirstOtherChess == false)    //若还没找到第一个棋子，就让他继续找
         {
-            if (GameController.vector2Chesse.ContainsKey(value))
+            if (CalculateUtil.vector2Chesse.ContainsKey(value))
                 findFirstOtherChess = true;
             else
                 canMovePoints.Add(value);
         }
         else//找到了第一个棋子后，就找第二个
         {
-            if (GameController.vector2Chesse.ContainsKey(value))//找到第二个且是敌方棋子，那就可以杀
+            if (CalculateUtil.vector2Chesse.ContainsKey(value))//找到第二个且是敌方棋子，那就可以杀
             {
-                GameObject targetChess = GameController.vector2Chesse[value];
+                GameObject targetChess = CalculateUtil.vector2Chesse[value];
                 if (targetChess.GetComponent<ChessCamp>().camp != GetComponent<ChessCamp>().camp)
                     canMovePoints.Add(value);
                 findSecondChess = true;

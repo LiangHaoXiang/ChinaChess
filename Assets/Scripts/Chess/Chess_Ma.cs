@@ -26,7 +26,7 @@ public class Chess_Ma : BaseChess
     /// <returns></returns>
     public override List<Vector2> CanMovePoints()
     {
-        Vector2 currentPos = GameController.chesse2Vector[gameObject];
+        Vector2 currentPos = CalculateUtil.chesse2Vector[gameObject];
 
         bool stopHourseRight = false;   //在右边绊马脚
         bool stopHourseLeft = false;    //在左边绊马脚
@@ -35,13 +35,13 @@ public class Chess_Ma : BaseChess
         List<Vector2> canMovePoints = new List<Vector2>();
         //优先判断有没有绊马脚的棋子
         //若马的右方有绊马脚棋子......
-        if (GameController.vector2Chesse.ContainsKey(new Vector2(currentPos.x + 1, currentPos.y)))
+        if (CalculateUtil.vector2Chesse.ContainsKey(new Vector2(currentPos.x + 1, currentPos.y)))
             stopHourseRight = true;
-        if (GameController.vector2Chesse.ContainsKey(new Vector2(currentPos.x - 1, currentPos.y)))
+        if (CalculateUtil.vector2Chesse.ContainsKey(new Vector2(currentPos.x - 1, currentPos.y)))
             stopHourseLeft = true;
-        if (GameController.vector2Chesse.ContainsKey(new Vector2(currentPos.x, currentPos.y + 1)))
+        if (CalculateUtil.vector2Chesse.ContainsKey(new Vector2(currentPos.x, currentPos.y + 1)))
             stopHourseUp = true;
-        if (GameController.vector2Chesse.ContainsKey(new Vector2(currentPos.x, currentPos.y - 1)))
+        if (CalculateUtil.vector2Chesse.ContainsKey(new Vector2(currentPos.x, currentPos.y - 1)))
             stopHourseDown = true;
 
         if (stopHourseRight == false)
@@ -91,12 +91,12 @@ public class Chess_Ma : BaseChess
     void JudgeMovePoint(Vector2 value, List<Vector2> canMovePoints)
     {
         //若网格存在，即在棋盘内
-        if (GameController.vector2Grids.ContainsKey(value))
+        if (CalculateUtil.vector2Grids.ContainsKey(value))
         {
             //若有棋子
-            if (GameController.vector2Chesse.ContainsKey(value))
+            if (CalculateUtil.vector2Chesse.ContainsKey(value))
             {
-                GameObject otherChess = GameController.vector2Chesse[value];
+                GameObject otherChess = CalculateUtil.vector2Chesse[value];
                 if (otherChess.GetComponent<ChessCamp>().camp != GetComponent<ChessCamp>().camp)
                     canMovePoints.Add(value);
             }

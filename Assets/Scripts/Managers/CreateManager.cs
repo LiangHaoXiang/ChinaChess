@@ -153,7 +153,7 @@ public class CreateManager : MonoBehaviour
         Vector2 point = new Vector2(point_X, point_Y);
         GameObject go = Instantiate(prefab);
         go.transform.parent = GameObject.Find("Chesses").transform;
-        go.transform.position = GameController.vector2Grids[point].transform.position;
+        go.transform.position = CalculateUtil.vector2Grids[point].transform.position;
         return go;
     }
 

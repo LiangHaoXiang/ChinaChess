@@ -62,7 +62,7 @@ public abstract class BaseChess : MonoBehaviour
             Vector3[] canMoveGrids = new Vector3[canMovePoints.Length];
             for (int i = 0; i < canMoveGrids.Length; i++)   //将所有可移动的二维坐标转化成网格点三维坐标
             {
-                canMoveGrids[i] = GameController.vector2Grids[canMovePoints[i]].transform.position;
+                canMoveGrids[i] = CalculateUtil.vector2Grids[canMovePoints[i]].transform.position;
             }
 
             if (canMovePoints.Length > 0)
@@ -74,9 +74,9 @@ public abstract class BaseChess : MonoBehaviour
                         canMoveGrids[i].y - 27.5 <= Input.mousePosition.y && Input.mousePosition.y <= canMoveGrids[i].y + 27.5)
                     {
                         //若点击位置存在其他棋子 且 是敌方棋子，那就是吃
-                        if (GameController.vector2Chesse.ContainsKey(canMovePoints[i]))
+                        if (CalculateUtil.vector2Chesse.ContainsKey(canMovePoints[i]))
                         {
-                            GameObject otherChess = GameController.vector2Chesse[canMovePoints[i]];
+                            GameObject otherChess = CalculateUtil.vector2Chesse[canMovePoints[i]];
                             if (otherChess.GetComponent<ChessCamp>().camp != GetComponent<ChessCamp>().camp)
                             {
                                 EatEvent(otherChess);   //吃
@@ -138,7 +138,7 @@ public abstract class BaseChess : MonoBehaviour
         {
             for (int i = 0; i < canMovePoints.Length; i++)
             {
-                if (canMovePoints[i] == GameController.chesse2Vector[createManager.GetBlackBoss()])
+                if (canMovePoints[i] == CalculateUtil.chesse2Vector[createManager.GetBlackBoss()])
                 {
                     Debug.Log("将军，黑方注意");
                     return true;
@@ -149,7 +149,7 @@ public abstract class BaseChess : MonoBehaviour
         {
             for (int i = 0; i < canMovePoints.Length; i++)
             {
-                if (canMovePoints[i] == GameController.chesse2Vector[createManager.GetRedBoss()])
+                if (canMovePoints[i] == CalculateUtil.chesse2Vector[createManager.GetRedBoss()])
                 {
                     Debug.Log("将军，红方注意");
                     return true;
@@ -192,11 +192,11 @@ public abstract class BaseChess : MonoBehaviour
         Vector2[] canMovePoints = CanMovePoints().ToArray();
         for (int i = 0; i < canMovePoints.Length; i++)
         {
-            GameController.vector2Grids[canMovePoints[i]].GetComponent<Image>().enabled = true;
+            CalculateUtil.vector2Grids[canMovePoints[i]].GetComponent<Image>().enabled = true;
             //若可移动点上存在其他棋子，那肯定就是敌方棋子了，提示可以击杀之
-            if (GameController.vector2Chesse.ContainsKey(canMovePoints[i]))
+            if (CalculateUtil.vector2Chesse.ContainsKey(canMovePoints[i]))
             {
-                GameController.vector2Chesse[canMovePoints[i]].transform.FindChild("被成为目标").gameObject.SetActive(true);
+                CalculateUtil.vector2Chesse[canMovePoints[i]].transform.FindChild("被成为目标").gameObject.SetActive(true);
             }
         }
         chessReciprocalState = ChessReciprocalState.beChoosed;
@@ -209,9 +209,9 @@ public abstract class BaseChess : MonoBehaviour
     {
         //将被选中时的所有变化还原
         Reset();
-        for(int i = 0; i < GameController.chesses.Length; i++)
+        for(int i = 0; i < CalculateUtil.chesses.Length; i++)
         {
-            GameController.chesses[i].transform.FindChild("被成为目标").gameObject.SetActive(false);
+            CalculateUtil.chesses[i].transform.FindChild("被成为目标").gameObject.SetActive(false);
         }
     }
 
@@ -227,7 +227,7 @@ public abstract class BaseChess : MonoBehaviour
     protected void Reset()
     {
         transform.FindChild("白边").gameObject.SetActive(false);
-        for (int i = 0; i < GameController.grids.Length; i++)
+        for (int i = 0; i < CalculateUtil.grids.Length; i++)
         {
             GameObject.Find("Grids").transform.GetChild(i).GetComponent<Image>().enabled = false;
         }

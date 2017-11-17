@@ -24,7 +24,7 @@ public class Chess_Zu : BaseChess
 
     public override List<Vector2> CanMovePoints()
     {
-        Vector2 currentPos = GameController.chesse2Vector[gameObject];
+        Vector2 currentPos = CalculateUtil.chesse2Vector[gameObject];
         List<Vector2> canMovePoints = new List<Vector2>();
 
         //若是红方且过了河 或是 黑方且过了河，就能左右走
@@ -60,11 +60,11 @@ public class Chess_Zu : BaseChess
     /// <param name="value"></param>
     void JudgeMovePoint(Vector2 value, List<Vector2> canMovePoints)
     {
-        if (GameController.vector2Grids.ContainsKey(value))
+        if (CalculateUtil.vector2Grids.ContainsKey(value))
         {
-            if (GameController.vector2Chesse.ContainsKey(value))
+            if (CalculateUtil.vector2Chesse.ContainsKey(value))
             {
-                GameObject otherChess = GameController.vector2Chesse[value];
+                GameObject otherChess = CalculateUtil.vector2Chesse[value];
                 if (otherChess.GetComponent<ChessCamp>().camp != GetComponent<ChessCamp>().camp)
                     canMovePoints.Add(value);
             }

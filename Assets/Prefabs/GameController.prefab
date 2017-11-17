@@ -43,6 +43,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1856395999130654
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4546871073157880}
+  - component: {fileID: 114964318195494150}
+  m_Layer: 0
+  m_Name: CalculateUtil
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &4022766891051658
 Transform:
   m_ObjectHideFlags: 1
@@ -54,7 +70,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4281446263451578}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4281446263451578
 Transform:
@@ -66,8 +82,22 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 4546871073157880}
   - {fileID: 4022766891051658}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4546871073157880
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1856395999130654}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4281446263451578}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &114641853642159882
@@ -81,22 +111,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7c15063a935a264aa3c886aaa82456c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  red_Ju: {fileID: 1015629010448386, guid: e5b951fd4df61f94d88f075425ec207a, type: 2}
-  red_Ma: {fileID: 1015629010448386, guid: 9a673cd1c3383bf41b19b5d531a2d4e5, type: 2}
-  red_Pao: {fileID: 1015629010448386, guid: 50bcd300223f83c46a0c308b4a7f84b1, type: 2}
-  red_Shi: {fileID: 1015629010448386, guid: a82699f0620f4ef4eae47c726204d40a, type: 2}
-  red_Xiang: {fileID: 1015629010448386, guid: 8326d50cf7f68954cb5d054c3993d1a2, type: 2}
-  red_Bing: {fileID: 1015629010448386, guid: 2d317bf1ca87b6f478e28c85adea8425, type: 2}
-  red_Shuai: {fileID: 1015629010448386, guid: f64c966a7eba31e4b824b9fb16e5d0f2, type: 2}
-  black_Ju: {fileID: 1015629010448386, guid: ebfb88a606dac9b45a7fd04761b6a0e4, type: 2}
-  black_Ma: {fileID: 1015629010448386, guid: ff6204c2424dbf34080c0f693c8ebd8b, type: 2}
-  black_Pao: {fileID: 1015629010448386, guid: f130dc6bb6774c0419a72ef6245da218, type: 2}
-  black_Shi: {fileID: 1015629010448386, guid: dd750b47a0b929b469d05e3c0a084700, type: 2}
-  black_Xiang: {fileID: 1015629010448386, guid: 19175149b53e1df44a5f4eaeae2a18a7,
-    type: 2}
-  black_Zu: {fileID: 1015629010448386, guid: dc93fac61e4080843876cad942497532, type: 2}
-  black_Jiang: {fileID: 1015629010448386, guid: 13ae99b23d37764439f91e6e6517d53c,
-    type: 2}
 --- !u!114 &114890840315869338
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -156,3 +170,14 @@ MonoBehaviour:
   b_Bing3: {fileID: 0}
   b_Bing4: {fileID: 0}
   b_Bing5: {fileID: 0}
+--- !u!114 &114964318195494150
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1856395999130654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 996aea0f68375a94594cda9fc6b48806, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

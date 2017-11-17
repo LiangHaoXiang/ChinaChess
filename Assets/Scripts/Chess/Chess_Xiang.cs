@@ -24,7 +24,7 @@ public class Chess_Xiang : BaseChess
 
     public override List<Vector2> CanMovePoints()
     {
-        Vector2 currentPos = GameController.chesse2Vector[gameObject];
+        Vector2 currentPos = CalculateUtil.chesse2Vector[gameObject];
         List<Vector2> canMovePoints = new List<Vector2>();
 
         //红方，不可过河
@@ -95,21 +95,21 @@ public class Chess_Xiang : BaseChess
     /// <param name="valueEye">象眼位置</param>
     void JudgeMovePoint(Vector2 value, Vector2 valueEye, List<Vector2> canMovePoints)
     {
-        if (GameController.vector2Grids.ContainsKey(valueEye))
+        if (CalculateUtil.vector2Grids.ContainsKey(valueEye))
         {
-            if (GameController.vector2Chesse.ContainsKey(valueEye))//若象眼位置存在棋子，那就憋住了
+            if (CalculateUtil.vector2Chesse.ContainsKey(valueEye))//若象眼位置存在棋子，那就憋住了
             {
                 return;
             }
             else
             {
                 //若网格存在，即在棋盘内
-                if (GameController.vector2Grids.ContainsKey(value))
+                if (CalculateUtil.vector2Grids.ContainsKey(value))
                 {
                     //若有棋子
-                    if (GameController.vector2Chesse.ContainsKey(value))
+                    if (CalculateUtil.vector2Chesse.ContainsKey(value))
                     {
-                        GameObject otherChess = GameController.vector2Chesse[value];
+                        GameObject otherChess = CalculateUtil.vector2Chesse[value];
                         if (otherChess.GetComponent<ChessCamp>().camp != GetComponent<ChessCamp>().camp)
                             canMovePoints.Add(value);
                     }
