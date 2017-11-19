@@ -6,7 +6,6 @@ using UnityEngine;
 /// </summary>
 public class CalculateUtil : MonoBehaviour
 {
-    public static GameObject[] chesses;   //获取所有棋子
     public static Vector3[,] grids;
     public static Vector2[,] points;
     /// <summary>
@@ -81,17 +80,10 @@ public class CalculateUtil : MonoBehaviour
             vector2Chesse.Clear();
         }
 
-        int count = GameObject.Find("Chesses").transform.childCount;
-        chesses = new GameObject[count];
-
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < PoolManager.work_List.Count; i++)
         {
-            chesses[i] = GameObject.Find("Chesses").transform.GetChild(i).gameObject;//获取所有棋子
-        }
-        for (int i = 0; i < count; i++)
-        {
-            chesse2Vector.Add(chesses[i], coords[chesses[i].transform.position]);
-            vector2Chesse.Add(coords[chesses[i].transform.position], chesses[i]);
+            chesse2Vector.Add(PoolManager.work_List[i], coords[PoolManager.work_List[i].transform.position]);
+            vector2Chesse.Add(coords[PoolManager.work_List[i].transform.position], PoolManager.work_List[i]);
         }
     }
     /// <summary>
@@ -103,67 +95,67 @@ public class CalculateUtil : MonoBehaviour
         CreateManager cm = CreateManager.Instance;
 
         //黑将的所有走法
-        if (cm.blackBoss != null)
+        if (cm.blackBoss.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.blackBoss.GetComponent<Chess_Boss>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.blackBoss.GetComponent<Chess_Boss>().CanMovePoints()[i]);
         //黑车1的所有走法
-        if (cm.b_Ju1 != null)
+        if (cm.b_Ju1.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.b_Ju1.GetComponent<Chess_Ju>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.b_Ju1.GetComponent<Chess_Ju>().CanMovePoints()[i]);
         //黑车2的所有走法
-        if (cm.b_Ju2 != null)
+        if (cm.b_Ju2.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.b_Ju2.GetComponent<Chess_Ju>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.b_Ju2.GetComponent<Chess_Ju>().CanMovePoints()[i]);
         //黑马1的所有走法
-        if (cm.b_Ma1 != null)
+        if (cm.b_Ma1.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.b_Ma1.GetComponent<Chess_Ma>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.b_Ma1.GetComponent<Chess_Ma>().CanMovePoints()[i]);
         //黑马2的所有走法
-        if (cm.b_Ma2 != null)
+        if (cm.b_Ma2.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.b_Ma2.GetComponent<Chess_Ma>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.b_Ma2.GetComponent<Chess_Ma>().CanMovePoints()[i]);
         //黑炮1的所有走法
-        if (cm.b_Pao1 != null)
+        if (cm.b_Pao1.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.b_Pao1.GetComponent<Chess_Pao>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.b_Pao1.GetComponent<Chess_Pao>().CanMovePoints()[i]);
         //黑炮2的所有走法
-        if (cm.b_Pao2 != null)
+        if (cm.b_Pao2.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.b_Pao2.GetComponent<Chess_Pao>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.b_Pao2.GetComponent<Chess_Pao>().CanMovePoints()[i]);
         //黑士1的所有走法
-        if (cm.b_Shi1 != null)
+        if (cm.b_Shi1.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.b_Shi1.GetComponent<Chess_Shi>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.b_Shi1.GetComponent<Chess_Shi>().CanMovePoints()[i]);
         //黑士2的所有走法
-        if (cm.b_Shi2 != null)
+        if (cm.b_Shi2.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.b_Shi2.GetComponent<Chess_Shi>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.b_Shi2.GetComponent<Chess_Shi>().CanMovePoints()[i]);
         //黑象1的所有走法
-        if (cm.b_Xiang1 != null)
+        if (cm.b_Xiang1.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.b_Xiang1.GetComponent<Chess_Xiang>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.b_Xiang1.GetComponent<Chess_Xiang>().CanMovePoints()[i]);
         //黑象2的所有走法
-        if (cm.b_Xiang2 != null)
+        if (cm.b_Xiang2.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.b_Xiang2.GetComponent<Chess_Xiang>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.b_Xiang2.GetComponent<Chess_Xiang>().CanMovePoints()[i]);
         //黑卒1的所有走法
-        if (cm.b_Bing1 != null)
+        if (cm.b_Bing1.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.b_Bing1.GetComponent<Chess_Zu>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.b_Bing1.GetComponent<Chess_Zu>().CanMovePoints()[i]);
         //黑卒2的所有走法
-        if (cm.b_Bing2 != null)
+        if (cm.b_Bing2.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.b_Bing2.GetComponent<Chess_Zu>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.b_Bing2.GetComponent<Chess_Zu>().CanMovePoints()[i]);
         //黑卒3的所有走法
-        if (cm.b_Bing3 != null)
+        if (cm.b_Bing3.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.b_Bing3.GetComponent<Chess_Zu>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.b_Bing3.GetComponent<Chess_Zu>().CanMovePoints()[i]);
         //黑卒4的所有走法
-        if (cm.b_Bing4 != null)
+        if (cm.b_Bing4.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.b_Bing4.GetComponent<Chess_Zu>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.b_Bing4.GetComponent<Chess_Zu>().CanMovePoints()[i]);
         //黑卒5的所有走法
-        if (cm.b_Bing5 != null)
+        if (cm.b_Bing5.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.b_Bing5.GetComponent<Chess_Zu>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.b_Bing5.GetComponent<Chess_Zu>().CanMovePoints()[i]);
 
@@ -179,67 +171,67 @@ public class CalculateUtil : MonoBehaviour
         CreateManager cm = CreateManager.Instance;
 
         //红将的所有走法
-        if (cm.redBoss != null)
+        if (cm.redBoss.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.blackBoss.GetComponent<Chess_Boss>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.blackBoss.GetComponent<Chess_Boss>().CanMovePoints()[i]);
         //红车1的所有走法
-        if (cm.r_Ju1 != null)
+        if (cm.r_Ju1.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.r_Ju1.GetComponent<Chess_Ju>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.r_Ju1.GetComponent<Chess_Ju>().CanMovePoints()[i]);
         //红车2的所有走法
-        if (cm.r_Ju2 != null)
+        if (cm.r_Ju2.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.r_Ju2.GetComponent<Chess_Ju>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.r_Ju2.GetComponent<Chess_Ju>().CanMovePoints()[i]);
         //红马1的所有走法
-        if (cm.r_Ma1 != null)
+        if (cm.r_Ma1.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.r_Ma1.GetComponent<Chess_Ma>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.r_Ma1.GetComponent<Chess_Ma>().CanMovePoints()[i]);
         //红马2的所有走法
-        if (cm.r_Ma2 != null)
+        if (cm.r_Ma2.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.r_Ma2.GetComponent<Chess_Ma>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.r_Ma2.GetComponent<Chess_Ma>().CanMovePoints()[i]);
         //红炮1的所有走法
-        if (cm.r_Pao1 != null)
+        if (cm.r_Pao1.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.r_Pao1.GetComponent<Chess_Pao>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.r_Pao1.GetComponent<Chess_Pao>().CanMovePoints()[i]);
         //红炮2的所有走法
-        if (cm.r_Pao2 != null)
+        if (cm.r_Pao2.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.r_Pao2.GetComponent<Chess_Pao>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.r_Pao2.GetComponent<Chess_Pao>().CanMovePoints()[i]);
         //红仕1的所有走法
-        if (cm.r_Shi1 != null)
+        if (cm.r_Shi1.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.r_Shi1.GetComponent<Chess_Shi>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.r_Shi1.GetComponent<Chess_Shi>().CanMovePoints()[i]);
         //红仕2的所有走法
-        if (cm.r_Shi2 != null)
+        if (cm.r_Shi2.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.r_Shi2.GetComponent<Chess_Shi>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.r_Shi2.GetComponent<Chess_Shi>().CanMovePoints()[i]);
         //红象1的所有走法
-        if (cm.r_Xiang1 != null)
+        if (cm.r_Xiang1.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.r_Xiang1.GetComponent<Chess_Xiang>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.r_Xiang1.GetComponent<Chess_Xiang>().CanMovePoints()[i]);
         //红象2的所有走法
-        if (cm.r_Xiang2 != null)
+        if (cm.r_Xiang2.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.r_Xiang2.GetComponent<Chess_Xiang>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.r_Xiang2.GetComponent<Chess_Xiang>().CanMovePoints()[i]);
         //红兵1的所有走法
-        if (cm.r_Bing1 != null)
+        if (cm.r_Bing1.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.r_Bing1.GetComponent<Chess_Zu>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.r_Bing1.GetComponent<Chess_Zu>().CanMovePoints()[i]);
         //红兵2的所有走法
-        if (cm.r_Bing2 != null)
+        if (cm.r_Bing2.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.r_Bing2.GetComponent<Chess_Zu>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.r_Bing2.GetComponent<Chess_Zu>().CanMovePoints()[i]);
         //红兵3的所有走法
-        if (cm.r_Bing3 != null)
+        if (cm.r_Bing3.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.r_Bing3.GetComponent<Chess_Zu>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.r_Bing3.GetComponent<Chess_Zu>().CanMovePoints()[i]);
         //红兵4的所有走法
-        if (cm.r_Bing4 != null)
+        if (cm.r_Bing4.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.r_Bing4.GetComponent<Chess_Zu>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.r_Bing4.GetComponent<Chess_Zu>().CanMovePoints()[i]);
         //红兵5的所有走法
-        if (cm.r_Bing5 != null)
+        if (cm.r_Bing5.parent == PoolManager.workChesses)
             for (int i = 0; i < cm.r_Bing5.GetComponent<Chess_Zu>().CanMovePoints().Count; i++)
                 allMoves.Add(cm.r_Bing5.GetComponent<Chess_Zu>().CanMovePoints()[i]);
 

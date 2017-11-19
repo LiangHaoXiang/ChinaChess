@@ -117,10 +117,10 @@ public class Chess_Boss : BaseChess
     void JudgeMovePoint(Vector2 value, List<Vector2> canMovePoints, GameObject self)
     {
         GameObject enemyBoss;
-        if (self == createManager.redBoss)
-            enemyBoss = createManager.blackBoss;
+        if (self == createManager.GetRedBoss())
+            enemyBoss = createManager.GetBlackBoss();
         else
-            enemyBoss = createManager.redBoss;
+            enemyBoss = createManager.GetRedBoss();
 
         if (CalculateUtil.vector2Grids.ContainsKey(value))
         {

@@ -125,7 +125,8 @@ public abstract class BaseChess : MonoBehaviour
         //播放音效
 
         //自行销毁
-        DestroyImmediate(gameObject);
+        //DestroyImmediate(gameObject);
+        PoolManager.Restore(gameObject);
     }
     /// <summary>
     /// 将军
@@ -209,9 +210,9 @@ public abstract class BaseChess : MonoBehaviour
     {
         //将被选中时的所有变化还原
         Reset();
-        for(int i = 0; i < CalculateUtil.chesses.Length; i++)
+        for(int i = 0; i < PoolManager.work_List.Count; i++)
         {
-            CalculateUtil.chesses[i].transform.FindChild("被成为目标").gameObject.SetActive(false);
+            PoolManager.work_List[i].transform.FindChild("被成为目标").gameObject.SetActive(false);
         }
     }
 

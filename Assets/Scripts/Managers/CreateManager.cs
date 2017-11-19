@@ -23,69 +23,69 @@ public class CreateManager : MonoBehaviour
     #endregion
     #region 各棋子实体
     [HideInInspector]
-    public GameObject redBoss;
+    public Transform redBoss;
     [HideInInspector]
-    public GameObject blackBoss;
+    public Transform blackBoss;
     [HideInInspector]
-    public GameObject r_Ju1;    //红车1
+    public Transform r_Ju1;    //红车1
     [HideInInspector]
-    public GameObject r_Ju2;    //红车2
+    public Transform r_Ju2;    //红车2
     [HideInInspector]
-    public GameObject b_Ju1;    //黑车1
+    public Transform b_Ju1;    //黑车1
     [HideInInspector]
-    public GameObject b_Ju2;    //黑车2
+    public Transform b_Ju2;    //黑车2
     [HideInInspector]
-    public GameObject r_Ma1;
+    public Transform r_Ma1;
     [HideInInspector]
-    public GameObject r_Ma2;
+    public Transform r_Ma2;
     [HideInInspector]
-    public GameObject b_Ma1;
+    public Transform b_Ma1;
     [HideInInspector]
-    public GameObject b_Ma2;
+    public Transform b_Ma2;
     [HideInInspector]
-    public GameObject r_Pao1;
+    public Transform r_Pao1;
     [HideInInspector]
-    public GameObject r_Pao2;
+    public Transform r_Pao2;
     [HideInInspector]
-    public GameObject b_Pao1;
+    public Transform b_Pao1;
     [HideInInspector]
-    public GameObject b_Pao2;
+    public Transform b_Pao2;
     [HideInInspector]
-    public GameObject r_Shi1;
+    public Transform r_Shi1;
     [HideInInspector]
-    public GameObject r_Shi2;
+    public Transform r_Shi2;
     [HideInInspector]
-    public GameObject b_Shi1;
+    public Transform b_Shi1;
     [HideInInspector]
-    public GameObject b_Shi2;
+    public Transform b_Shi2;
     [HideInInspector]
-    public GameObject r_Xiang1;
+    public Transform r_Xiang1;
     [HideInInspector]
-    public GameObject r_Xiang2;
+    public Transform r_Xiang2;
     [HideInInspector]
-    public GameObject b_Xiang1;
+    public Transform b_Xiang1;
     [HideInInspector]
-    public GameObject b_Xiang2;
+    public Transform b_Xiang2;
     [HideInInspector]
-    public GameObject r_Bing1;
+    public Transform r_Bing1;
     [HideInInspector]
-    public GameObject r_Bing2;
+    public Transform r_Bing2;
     [HideInInspector]
-    public GameObject r_Bing3;
+    public Transform r_Bing3;
     [HideInInspector]
-    public GameObject r_Bing4;
+    public Transform r_Bing4;
     [HideInInspector]
-    public GameObject r_Bing5;
+    public Transform r_Bing5;
     [HideInInspector]
-    public GameObject b_Bing1;
+    public Transform b_Bing1;
     [HideInInspector]
-    public GameObject b_Bing2;
+    public Transform b_Bing2;
     [HideInInspector]
-    public GameObject b_Bing3;
+    public Transform b_Bing3;
     [HideInInspector]
-    public GameObject b_Bing4;
+    public Transform b_Bing4;
     [HideInInspector]
-    public GameObject b_Bing5;
+    public Transform b_Bing5;
     #endregion
     private static CreateManager instance = null;
     public static CreateManager Instance { get { return instance; } }
@@ -148,13 +148,13 @@ public class CreateManager : MonoBehaviour
     /// <param name="prefab"></param>
     /// <param name="point_X"></param>
     /// <param name="point_Y"></param>
-    public GameObject Create(GameObject prefab, int point_X, int point_Y)
+    public Transform Create(GameObject prefab, int point_X, int point_Y)
     {
         Vector2 point = new Vector2(point_X, point_Y);
         GameObject go = Instantiate(prefab);
-        go.transform.parent = GameObject.Find("Chesses").transform;
+        PoolManager.Push(go);   //放入池工作区进行管理
         go.transform.position = CalculateUtil.vector2Grids[point].transform.position;
-        return go;
+        return go.transform;
     }
 
     /// <summary>
@@ -162,14 +162,14 @@ public class CreateManager : MonoBehaviour
     /// </summary>
     public GameObject GetRedBoss()
     {
-        return redBoss;
+        return redBoss.gameObject;
     }
     /// <summary>
     /// 返回黑将棋子
     /// </summary>
     public GameObject GetBlackBoss()
     {
-        return blackBoss;
+        return blackBoss.gameObject;
     }
 }
 

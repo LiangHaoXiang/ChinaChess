@@ -1653,7 +1653,7 @@ GameObject:
   m_Component:
   - component: {fileID: 126172752}
   m_Layer: 5
-  m_Name: //tests
+  m_Name: "//tests \u8BF7\u5FFD\u7565\u65E0\u89C6"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1685,7 +1685,7 @@ RectTransform:
   - {fileID: 365146669}
   - {fileID: 970379345}
   m_Father: {fileID: 1707825781}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -10786,6 +10786,39 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1387799892}
+--- !u!1 &1401021118
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1401021119}
+  m_Layer: 5
+  m_Name: RestoreChesses
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1401021119
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1401021118}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1707825781}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -1, y: 6}
+  m_SizeDelta: {x: 390, y: 415}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1401397665
 GameObject:
   m_ObjectHideFlags: 0
@@ -11789,7 +11822,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1558831554}
   m_Layer: 5
-  m_Name: Chesses
+  m_Name: WorkChesses
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11806,7 +11839,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1707825781}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -12187,6 +12220,7 @@ RectTransform:
   m_Children:
   - {fileID: 896937214}
   - {fileID: 2141244510}
+  - {fileID: 1401021119}
   - {fileID: 1558831554}
   - {fileID: 126172752}
   m_Father: {fileID: 0}
