@@ -130,7 +130,7 @@ public class Chess_Boss : BaseChess
             if (value.x == CalculateUtil.chesse2Vector[enemyBoss].x)
             {
                 float enemyBoss_Y = CalculateUtil.chesse2Vector[enemyBoss].y;
-                if (enemyBoss == createManager.blackBoss)
+                if (enemyBoss == createManager.GetBlackBoss())
                 {
                     for (int i = (int)value.y + 1; i < enemyBoss_Y; i++)
                     {
@@ -138,7 +138,7 @@ public class Chess_Boss : BaseChess
                             existOtherChessOnSame_X_Axis = true;
                     }
                 }
-                else if(enemyBoss == createManager.redBoss)
+                else if(enemyBoss == createManager.GetRedBoss())
                 {
                     for (int i = (int)value.y - 1; i > enemyBoss_Y; i--)
                     {

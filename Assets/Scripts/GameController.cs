@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum 着法状态
 {
@@ -17,7 +18,7 @@ public class GameController : MonoBehaviour
     /// <summary>
     /// 记录每走一步的所有棋局信息
     /// </summary>
-    public static List<Dictionary<Vector2, GameObject>> maps;
+    public static List<Dictionary<GameObject, Vector2>> maps;
 
     private CreateManager createManager;
 
@@ -32,7 +33,7 @@ public class GameController : MonoBehaviour
         if (instance == null)
             instance = this;
         createManager = GetComponentInChildren<CreateManager>();
-        maps = new List<Dictionary<Vector2, GameObject>>();
+        maps = new List<Dictionary<GameObject, Vector2>>();
     }
 
     void Start ()
@@ -51,7 +52,13 @@ public class GameController : MonoBehaviour
     public static void UpdateChessGame()
     {
         CalculateUtil.UpdateChessData();        //更新棋局
-        maps.Add(CalculateUtil.vector2Chesse);  //添加棋谱
+        Dictionary<GameObject, Vector2> temp = new Dictionary<GameObject, Vector2>();
+        foreach (KeyValuePair<GameObject, Vector2> kvp in CalculateUtil.chesse2Vector)
+        {
+            //一定要遍历赋值的，否则如果直接temp=CalculateUtil.chesse2Vector就相当于引用了这个静态字典，没用
+            temp.Add(kvp.Key, kvp.Value);
+        }
+        maps.Add(temp);  //添加棋谱
     }
     /// <summary>
     /// 回合制 轮流走棋 ，itween 运动完成后调用
@@ -71,4 +78,26 @@ public class GameController : MonoBehaviour
         ResetChessReciprocalStateEvent();
         Chess_Boss.TipsBeAttacking();
     }
+    /// <summary>
+    /// 悔棋点击事件
+    /// </summary>
+    public void Undo_Click()
+    {
+        if (maps.Count >= 3)
+        {
+            Dictionary<GameObject, Vector2> temp = maps[maps.Count - 1 - 2];
+            foreach (KeyValuePair<GameObject, Vector2> kvp in temp)
+            {
+                CalculateUtil.ResetChessByMaps(kvp.Key, kvp.Value);
+            }
+            maps.RemoveRange(maps.Count - 2, 2);
+            CalculateUtil.UpdateChessData();
+        }
+        else
+        {
+            //GameObject.Find("UndoButton").GetComponent<Button>().enabled = false;
+        }
+    }
+
+
 }

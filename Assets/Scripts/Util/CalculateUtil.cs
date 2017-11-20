@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// 用于辅助计算的类
+/// 用于辅助计算与处理的类
 /// </summary>
 public class CalculateUtil : MonoBehaviour
 {
@@ -236,5 +236,17 @@ public class CalculateUtil : MonoBehaviour
                 allMoves.Add(cm.r_Bing5.GetComponent<Chess_Zu>().CanMovePoints()[i]);
 
         return allMoves;
+    }
+    /// <summary>
+    /// 还原某个棋子在某个棋局的位置
+    /// </summary>
+    /// <param name="chess"></param>
+    /// <param name="point"></param>
+    /// <param name="mapIndex">棋谱第index步</param>
+    public static void ResetChessByMaps(GameObject chess, Vector2 point)
+    {
+        if (chess.transform.parent != PoolManager.workChesses)
+            PoolManager.Take(chess);    //被吃的棋子从回收区提取回来
+        chess.transform.position = vector2Grids[point].transform.position;
     }
 }
