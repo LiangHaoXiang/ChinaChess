@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public delegate bool BeAttackingEventHandler(); //被将军
+public delegate bool DetectBeAttackedEventHandler(); //被将军
 public class Chess_Boss : BaseChess
 {
-    public static event BeAttackingEventHandler BeAttackingEvent;   //被将军事件
+    public static event DetectBeAttackedEventHandler DetectBeAttackedEvent;   //被将军事件
     public override void Awake()
     {
         base.Awake();
@@ -22,11 +22,11 @@ public class Chess_Boss : BaseChess
         base.Update();
     }
     /// <summary>
-    /// 提示被将军
+    /// 检测是否被将军
     /// </summary>
-    public static void TipsBeAttacking()
+    public static void DetectBeAttacked()
     {
-        BeAttackingEvent();
+        DetectBeAttackedEvent();
     }
     /// <summary>
     /// 被将死
@@ -60,7 +60,12 @@ public class Chess_Boss : BaseChess
         //}
         //else
         #endregion
-            return false;
+        if (chessSituationState == ChessSituationState.BeAttacked)
+        {
+
+        }
+
+        return false;
     }
 
     public override List<Vector2> CanMovePoints()
@@ -124,7 +129,7 @@ public class Chess_Boss : BaseChess
 
         if (CalculateUtil.vector2Grids.ContainsKey(value))
         {
-            //不管value处有没有棋子，先判断value是否和敌方公照面
+            //不管value处有没有棋子，先判断value是否和敌方公照面(是否x坐标相同)
             bool existOtherChessOnSame_X_Axis = false;   //在公想要走的位置和对面公的位置之间是否有其他棋子
             //若想要走的位置和对面公同一条竖线，那要判断是否照面
             if (value.x == CalculateUtil.chesse2Vector[enemyBoss].x)

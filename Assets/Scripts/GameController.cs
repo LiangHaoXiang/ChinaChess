@@ -76,7 +76,7 @@ public class GameController : MonoBehaviour
 
         UpdateChessGame();
         ResetChessReciprocalStateEvent();
-        Chess_Boss.TipsBeAttacking();
+        Chess_Boss.DetectBeAttacked();
     }
     /// <summary>
     /// 悔棋点击事件

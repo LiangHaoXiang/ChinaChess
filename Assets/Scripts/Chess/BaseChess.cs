@@ -38,10 +38,10 @@ public abstract class BaseChess : MonoBehaviour
         createManager = GameObject.Find("CreateManager").GetComponent<CreateManager>();
         chessReciprocalState = ChessReciprocalState.unChoosed;
         chessSituationState = ChessSituationState.Idle;
-        ChooseEvent += new ChooseEventHandler(CancelChoose);//订阅事件
-        EatEvent += new EatEventHandler(Eat);               //订阅吃事件
-        GameController.ResetChessReciprocalStateEvent += CancelChoose; //订阅重置棋子状态事件
-        Chess_Boss.BeAttackingEvent += JiangJun;            //订阅将军事件
+        //PoolManager.PushEvent += SubscribeEvents;//棋子被创建时就该订阅这一堆事件
+        SubscribeEvents();
+        PoolManager.TakeEvent += SubscribeEvents;
+        PoolManager.RestoreEvent += CancelSubscribeEvents;
     }
 
     public virtual void Update()
@@ -106,10 +106,7 @@ public abstract class BaseChess : MonoBehaviour
     {
         if (chess == gameObject)
         {
-            EatEvent -= Eat;    //需要取消订阅事件，否则销毁物体后会空引用
-            ChooseEvent -= CancelChoose;
-            GameController.ResetChessReciprocalStateEvent -= CancelChoose;
-            Chess_Boss.BeAttackingEvent -= JiangJun;            
+            CancelSubscribeEvents();//需要取消订阅事件，否则回收物体后可能会空引用
             Killed();
         }
     }
@@ -124,39 +121,41 @@ public abstract class BaseChess : MonoBehaviour
     {
         //播放音效
 
-        //自行销毁
-        //DestroyImmediate(gameObject);
+        //被杀 回收
         PoolManager.Restore(gameObject);
     }
     /// <summary>
-    /// 将军
+    /// 判断是否会将军
     /// </summary>
-    public bool JiangJun()
+    public bool DetectJiangJun()
     {
         //就是判断当前可移动的点包含将军的位置
         Vector2[] canMovePoints = CanMovePoints().ToArray();
-        if (GetComponent<ChessCamp>().camp == Camp.Red)
+
+        for (int i = 0; i < canMovePoints.Length; i++)
         {
-            for (int i = 0; i < canMovePoints.Length; i++)
+            if (GetComponent<ChessCamp>().camp == Camp.Red)
             {
                 if (canMovePoints[i] == CalculateUtil.chesse2Vector[createManager.GetBlackBoss()])
                 {
                     Debug.Log("将军，黑方注意");
+                    chessSituationState = ChessSituationState.Attacking;
+                    createManager.GetBlackBoss().GetComponent<Chess_Boss>().chessSituationState = ChessSituationState.BeAttacked;
                     return true;
                 }
             }
-        }
-        if (GetComponent<ChessCamp>().camp == Camp.Black)
-        {
-            for (int i = 0; i < canMovePoints.Length; i++)
+            else
             {
                 if (canMovePoints[i] == CalculateUtil.chesse2Vector[createManager.GetRedBoss()])
                 {
                     Debug.Log("将军，红方注意");
+                    chessSituationState = ChessSituationState.Attacking;
+                    createManager.GetRedBoss().GetComponent<Chess_Boss>().chessSituationState = ChessSituationState.BeAttacked;
                     return true;
                 }
             }
         }
+        chessSituationState = ChessSituationState.Idle;
         return false;
     }
 
@@ -233,5 +232,25 @@ public abstract class BaseChess : MonoBehaviour
             GameObject.Find("Grids").transform.GetChild(i).GetComponent<Image>().enabled = false;
         }
         ResetChessReciprocalState();
+    }
+    /// <summary>
+    /// 订阅一堆的事件
+    /// </summary>
+    public void SubscribeEvents()
+    {
+        ChooseEvent += new ChooseEventHandler(CancelChoose);//订阅取消选择事件
+        EatEvent += new EatEventHandler(Eat);               //订阅吃事件
+        GameController.ResetChessReciprocalStateEvent += CancelChoose; //订阅重置棋子状态事件
+        Chess_Boss.DetectBeAttackedEvent += DetectJiangJun;            //订阅检测将军事件
+    }
+    /// <summary>
+    /// 取消订阅一堆的事件
+    /// </summary>
+    public void CancelSubscribeEvents()
+    {
+        EatEvent -= Eat;
+        ChooseEvent -= CancelChoose;
+        GameController.ResetChessReciprocalStateEvent -= CancelChoose;
+        Chess_Boss.DetectBeAttackedEvent -= DetectJiangJun;
     }
 }
