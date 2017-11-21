@@ -92,6 +92,8 @@ public class GameController : MonoBehaviour
             }
             maps.RemoveRange(maps.Count - 2, 2);
             CalculateUtil.UpdateChessData();
+            ResetChessReciprocalStateEvent();
+            Chess_Boss.DetectBeAttacked();
         }
         else
         {

@@ -38,8 +38,8 @@ public abstract class BaseChess : MonoBehaviour
         createManager = GameObject.Find("CreateManager").GetComponent<CreateManager>();
         chessReciprocalState = ChessReciprocalState.unChoosed;
         chessSituationState = ChessSituationState.Idle;
-        //PoolManager.PushEvent += SubscribeEvents;//棋子被创建时就该订阅这一堆事件
-        SubscribeEvents();
+        PoolManager.PushEvent += SubscribeEvents;//棋子被创建时就该订阅这一堆事件
+        //SubscribeEvents(gameObject);
         PoolManager.TakeEvent += SubscribeEvents;
         PoolManager.RestoreEvent += CancelSubscribeEvents;
     }
@@ -106,7 +106,7 @@ public abstract class BaseChess : MonoBehaviour
     {
         if (chess == gameObject)
         {
-            CancelSubscribeEvents();//需要取消订阅事件，否则回收物体后可能会空引用
+            //CancelSubscribeEvents();//需要取消订阅事件，否则回收物体后可能会空引用
             Killed();
         }
     }
@@ -236,21 +236,29 @@ public abstract class BaseChess : MonoBehaviour
     /// <summary>
     /// 订阅一堆的事件
     /// </summary>
-    public void SubscribeEvents()
+    /// <param name="chess">增加判断是否是自身，因为这个方法在每个派生类中都添加订阅了，事件触发时只执行自身的方法，其他方法没用</param>
+    public void SubscribeEvents(GameObject chess)
     {
-        ChooseEvent += new ChooseEventHandler(CancelChoose);//订阅取消选择事件
-        EatEvent += new EatEventHandler(Eat);               //订阅吃事件
-        GameController.ResetChessReciprocalStateEvent += CancelChoose; //订阅重置棋子状态事件
-        Chess_Boss.DetectBeAttackedEvent += DetectJiangJun;            //订阅检测将军事件
+        if (chess == gameObject)
+        {
+            ChooseEvent += new ChooseEventHandler(CancelChoose);//订阅取消选择事件
+            EatEvent += new EatEventHandler(Eat);               //订阅吃事件
+            GameController.ResetChessReciprocalStateEvent += CancelChoose; //订阅重置棋子状态事件
+            Chess_Boss.DetectBeAttackedEvent += DetectJiangJun;            //订阅检测将军事件
+        }
     }
     /// <summary>
     /// 取消订阅一堆的事件
     /// </summary>
-    public void CancelSubscribeEvents()
+    /// <param name="chess">增加判断是否是自身，因为这个方法在每个派生类中都添加订阅了，事件触发时只执行自身的方法，其他方法没用</param>
+    public void CancelSubscribeEvents(GameObject chess)
     {
-        EatEvent -= Eat;
-        ChooseEvent -= CancelChoose;
-        GameController.ResetChessReciprocalStateEvent -= CancelChoose;
-        Chess_Boss.DetectBeAttackedEvent -= DetectJiangJun;
+        if (chess == gameObject)
+        {
+            EatEvent -= Eat;
+            ChooseEvent -= CancelChoose;
+            GameController.ResetChessReciprocalStateEvent -= CancelChoose;
+            Chess_Boss.DetectBeAttackedEvent -= DetectJiangJun;
+        }
     }
 }

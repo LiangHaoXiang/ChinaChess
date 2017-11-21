@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//public delegate void PushEventHandler();
-public delegate void TakeEventHandler();
-public delegate void RestoreEventHandler();
+public delegate void PushEventHandler(GameObject chess);
+public delegate void TakeEventHandler(GameObject chess);
+public delegate void RestoreEventHandler(GameObject chess);
 
 public class PoolManager : MonoBehaviour
 {
-    //public static event PushEventHandler PushEvent; //刚加入工作区事件(棋子刚被创建就订阅一堆事件)
+    public static event PushEventHandler PushEvent; //刚加入工作区事件(棋子刚被创建就订阅一堆事件)
     public static event TakeEventHandler TakeEvent; //从回收区提取棋子事件(需要将被吃时取消订阅的事件全订阅回来)
-    public static event RestoreEventHandler RestoreEvent;//棋子回收事件(需要取消订阅一堆事件)
+    public static event RestoreEventHandler RestoreEvent;  //某个棋子回收事件(需要取消订阅一堆事件)
 
     public static List<GameObject> work_List;       //工作区列表
     public static List<GameObject> restore_List;    //回收区列表
@@ -33,7 +33,7 @@ public class PoolManager : MonoBehaviour
     {
         work_List.Add(chess);
         SetParentToWork(chess);
-        //PushEvent();
+        PushEvent(chess);
     }
     /// <summary>
     /// 提取棋子
@@ -45,7 +45,7 @@ public class PoolManager : MonoBehaviour
         restore_List.Remove(chess);
         SetParentToWork(chess);
         chess.SetActive(true);
-        TakeEvent();//把取消订阅的事件全订阅回来
+        TakeEvent(chess);//把取消订阅的事件全订阅回来
     }
     /// <summary>
     /// 回收棋子
@@ -57,7 +57,7 @@ public class PoolManager : MonoBehaviour
         work_List.Remove(chess);
         SetParentToRestore(chess);
         chess.SetActive(false);
-        //RestoreEvent();
+        RestoreEvent(chess);
     }
 
     public static void SetParentToWork(GameObject chess)
