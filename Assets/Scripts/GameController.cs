@@ -53,9 +53,9 @@ public class GameController : MonoBehaviour
     {
         CalculateUtil.UpdateChessData();        //更新棋局
         Dictionary<GameObject, Vector2> temp = new Dictionary<GameObject, Vector2>();
-        foreach (KeyValuePair<GameObject, Vector2> kvp in CalculateUtil.chesse2Vector)
+        foreach (KeyValuePair<GameObject, Vector2> kvp in CalculateUtil.chess2Vector)
         {
-            //一定要遍历赋值的，否则如果直接temp=CalculateUtil.chesse2Vector就相当于引用了这个静态字典，没用
+            //一定要遍历赋值的，否则如果直接temp=CalculateUtil.chess2Vector就相当于引用了这个静态字典，没用
             temp.Add(kvp.Key, kvp.Value);
         }
         maps.Add(temp);  //添加棋谱

@@ -48,17 +48,17 @@ public abstract class BaseChess : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Move();
+            Move(CalculateUtil.chess2Vector, CalculateUtil.vector2Chess);
         }
     }
     /// <summary>
     /// 移动
     /// </summary>
-    public void Move()
+    public void Move(Dictionary<GameObject, Vector2> chess2Vector, Dictionary<Vector2, GameObject> vector2Chess)
     {
         if (chessReciprocalState == ChessReciprocalState.beChoosed)
         {
-            Vector2[] canMovePoints = CanMovePoints().ToArray();
+            Vector2[] canMovePoints = CanMovePoints(chess2Vector, vector2Chess).ToArray();
             Vector3[] canMoveGrids = new Vector3[canMovePoints.Length];
             for (int i = 0; i < canMoveGrids.Length; i++)   //将所有可移动的二维坐标转化成网格点三维坐标
             {
@@ -74,9 +74,9 @@ public abstract class BaseChess : MonoBehaviour
                         canMoveGrids[i].y - 27.5 <= Input.mousePosition.y && Input.mousePosition.y <= canMoveGrids[i].y + 27.5)
                     {
                         //若点击位置存在其他棋子 且 是敌方棋子，那就是吃
-                        if (CalculateUtil.vector2Chesse.ContainsKey(canMovePoints[i]))
+                        if (vector2Chess.ContainsKey(canMovePoints[i]))
                         {
-                            GameObject otherChess = CalculateUtil.vector2Chesse[canMovePoints[i]];
+                            GameObject otherChess = vector2Chess[canMovePoints[i]];
                             if (otherChess.GetComponent<ChessCamp>().camp != GetComponent<ChessCamp>().camp)
                             {
                                 EatEvent(otherChess);   //吃
@@ -111,9 +111,12 @@ public abstract class BaseChess : MonoBehaviour
         }
     }
     /// <summary>
-    /// 该棋子能移动的所有位置,返回的是平面二维坐标，如(0,0)、(3,5)、(6,6)等
+    /// 根据棋局信息，该棋子能移动的所有位置,返回的是平面二维坐标，如(0,0)、(3,5)、(6,6)等
     /// </summary>
-    public abstract List<Vector2> CanMovePoints();
+    /// <param name="chess2Vector">棋局信息</param>
+    /// <param name="vector2Chess">棋局信息</param>
+    /// <returns></returns>
+    public abstract List<Vector2> CanMovePoints(Dictionary<GameObject, Vector2> chess2Vector, Dictionary<Vector2, GameObject> vector2Chess);
     /// <summary>
     /// 被杀
     /// </summary>
@@ -127,16 +130,16 @@ public abstract class BaseChess : MonoBehaviour
     /// <summary>
     /// 判断是否会将军
     /// </summary>
-    public bool DetectJiangJun()
+    public bool DetectJiangJun(Dictionary<GameObject, Vector2> chess2Vector, Dictionary<Vector2, GameObject> vector2Chess)
     {
         //就是判断当前可移动的点包含将军的位置
-        Vector2[] canMovePoints = CanMovePoints().ToArray();
+        Vector2[] canMovePoints = CanMovePoints(chess2Vector, vector2Chess).ToArray();
 
         for (int i = 0; i < canMovePoints.Length; i++)
         {
             if (GetComponent<ChessCamp>().camp == Camp.Red)
             {
-                if (canMovePoints[i] == CalculateUtil.chesse2Vector[createManager.GetBlackBoss()])
+                if (canMovePoints[i] == chess2Vector[createManager.GetBlackBoss()])
                 {
                     Debug.Log("将军，黑方注意");
                     chessSituationState = ChessSituationState.Attacking;
@@ -146,7 +149,7 @@ public abstract class BaseChess : MonoBehaviour
             }
             else
             {
-                if (canMovePoints[i] == CalculateUtil.chesse2Vector[createManager.GetRedBoss()])
+                if (canMovePoints[i] == chess2Vector[createManager.GetRedBoss()])
                 {
                     Debug.Log("将军，红方注意");
                     chessSituationState = ChessSituationState.Attacking;
@@ -189,14 +192,14 @@ public abstract class BaseChess : MonoBehaviour
         //棋子稍微上升
 
         //可以提示出该棋子能移动的所有位置
-        Vector2[] canMovePoints = CanMovePoints().ToArray();
+        Vector2[] canMovePoints = CanMovePoints(CalculateUtil.chess2Vector, CalculateUtil.vector2Chess).ToArray();
         for (int i = 0; i < canMovePoints.Length; i++)
         {
             CalculateUtil.vector2Grids[canMovePoints[i]].GetComponent<Image>().enabled = true;
             //若可移动点上存在其他棋子，那肯定就是敌方棋子了，提示可以击杀之
-            if (CalculateUtil.vector2Chesse.ContainsKey(canMovePoints[i]))
+            if (CalculateUtil.vector2Chess.ContainsKey(canMovePoints[i]))
             {
-                CalculateUtil.vector2Chesse[canMovePoints[i]].transform.FindChild("被成为目标").gameObject.SetActive(true);
+                CalculateUtil.vector2Chess[canMovePoints[i]].transform.FindChild("被成为目标").gameObject.SetActive(true);
             }
         }
         chessReciprocalState = ChessReciprocalState.beChoosed;

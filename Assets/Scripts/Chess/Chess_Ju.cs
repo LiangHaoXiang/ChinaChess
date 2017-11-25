@@ -25,16 +25,16 @@ public class Chess_Ju : BaseChess
     /// 该棋子能移动的所有位置,返回的是平面二维坐标，如(0,0)、(3,5)、(6,6)等
     /// </summary>
     /// <returns></returns>
-    public override List<Vector2> CanMovePoints()
+    public override List<Vector2> CanMovePoints(Dictionary<GameObject, Vector2> chess2Vector, Dictionary<Vector2, GameObject> vector2Chess)
     {
-        Vector2 currentPos = CalculateUtil.chesse2Vector[gameObject];
+        Vector2 currentPos = chess2Vector[gameObject];
         List<Vector2> canMovePoints = new List<Vector2>();
 
         for (int i = (int)currentPos.x - 1; i >= 0; i--)     //向左检索
         {
             Vector2 value = new Vector2(i, currentPos.y);
             bool findOtherChess = false;
-            JudgeMovePoint(value, ref findOtherChess, canMovePoints);
+            JudgeMovePoint(value, ref findOtherChess, canMovePoints, vector2Chess);
             if (findOtherChess) break;
         }
 
@@ -42,7 +42,7 @@ public class Chess_Ju : BaseChess
         {
             Vector2 value = new Vector2(i, currentPos.y);
             bool findOtherChess = false;
-            JudgeMovePoint(value, ref findOtherChess, canMovePoints);
+            JudgeMovePoint(value, ref findOtherChess, canMovePoints, vector2Chess);
             if (findOtherChess) break;
         }
 
@@ -50,7 +50,7 @@ public class Chess_Ju : BaseChess
         {
             Vector2 value = new Vector2(currentPos.x, i);
             bool findOtherChess = false;
-            JudgeMovePoint(value, ref findOtherChess, canMovePoints);
+            JudgeMovePoint(value, ref findOtherChess, canMovePoints, vector2Chess);
             if (findOtherChess) break;
         }
 
@@ -58,7 +58,7 @@ public class Chess_Ju : BaseChess
         {
             Vector2 value = new Vector2(currentPos.x, i);
             bool findOtherChess = false;
-            JudgeMovePoint(value, ref findOtherChess, canMovePoints);
+            JudgeMovePoint(value, ref findOtherChess, canMovePoints, vector2Chess);
             if (findOtherChess) break;
         }
 
@@ -68,11 +68,11 @@ public class Chess_Ju : BaseChess
     /// 车专属判断是否可以走这个点
     /// </summary>
     /// <param name="value"></param>
-    void JudgeMovePoint(Vector2 value, ref bool findOtherChess, List<Vector2> canMovePoints)
+    void JudgeMovePoint(Vector2 value, ref bool findOtherChess, List<Vector2> canMovePoints, Dictionary<Vector2, GameObject> vector2Chess)
     {
-        if (CalculateUtil.vector2Chesse.ContainsKey(value))    //若有其他棋子，那就停下来
+        if (vector2Chess.ContainsKey(value))    //若有其他棋子，那就停下来
         {
-            GameObject otherChess = CalculateUtil.vector2Chesse[value];
+            GameObject otherChess = vector2Chess[value];
             if (otherChess.GetComponent<ChessCamp>().camp != GetComponent<ChessCamp>().camp)
                 canMovePoints.Add(value);
             findOtherChess = true;
@@ -83,7 +83,7 @@ public class Chess_Ju : BaseChess
 
     //    public override List<Vector2> CanMovePoints()
     //    {
-    //        Vector2 currentPos = CalculateUtil.chesse2Vector[gameObject];
+    //        Vector2 currentPos = CalculateUtil.chess2Vector[gameObject];
 
     //        List<Vector2> sameX_points = new List<Vector2>();   //存储与本棋子相同x坐标(同列)的其他棋子
     //        List<Vector2> sameY_points = new List<Vector2>();   //存储与本棋子相同y坐标(同行)的其他棋子
@@ -170,9 +170,9 @@ public class Chess_Ju : BaseChess
 
     //            //可移动边界获取好了，还要判断是否为空(即边界还是初始值时要注意)和为开闭区间，即红方还是黑方的棋子
     //            Vector2 cu = new Vector2(currentPos.x, upBorder);
-    //            if (CalculateUtil.vector2Chesse.ContainsKey(cu)) 
+    //            if (CalculateUtil.vector2Chess.ContainsKey(cu)) 
     //            {
-    //                GameObject cuChesses = CalculateUtil.vector2Chesse[new Vector2(currentPos.x, upBorder)];
+    //                GameObject cuChesses = CalculateUtil.vector2Chess[new Vector2(currentPos.x, upBorder)];
     //                //首先要判断边界处的棋子是否不等于自身？
     //                //若上边界处有棋子并且是己方棋，那就是开区间,否则是闭区间
     //                if (cuChesses != gameObject && cuChesses.GetComponent<ChessCamp>().camp == GetComponent<ChessCamp>().camp)
@@ -180,25 +180,25 @@ public class Chess_Ju : BaseChess
     //            }
 
     //            Vector2 cd = new Vector2(currentPos.x, downBorder);
-    //            if (CalculateUtil.vector2Chesse.ContainsKey(new Vector2(currentPos.x, downBorder)))
+    //            if (CalculateUtil.vector2Chess.ContainsKey(new Vector2(currentPos.x, downBorder)))
     //            {
-    //                GameObject cdChesses = CalculateUtil.vector2Chesse[new Vector2(currentPos.x, downBorder)];
+    //                GameObject cdChesses = CalculateUtil.vector2Chess[new Vector2(currentPos.x, downBorder)];
     //                if (cdChesses != gameObject && cdChesses.GetComponent<ChessCamp>().camp == GetComponent<ChessCamp>().camp)
     //                    downBorder = downBorder + 1;
     //            }
 
     //            Vector2 lc = new Vector2(leftBorder, currentPos.y);
-    //            if (CalculateUtil.vector2Chesse.ContainsKey(lc))
+    //            if (CalculateUtil.vector2Chess.ContainsKey(lc))
     //            {
-    //                GameObject lcChesse = CalculateUtil.vector2Chesse[new Vector2(leftBorder, currentPos.y)];
+    //                GameObject lcChesse = CalculateUtil.vector2Chess[new Vector2(leftBorder, currentPos.y)];
     //                if (lcChesse != gameObject && lcChesse.GetComponent<ChessCamp>().camp == GetComponent<ChessCamp>().camp)
     //                        leftBorder = leftBorder + 1;
     //            }
 
     //            Vector2 rc = new Vector2(rightBorder, currentPos.y);
-    //            if (CalculateUtil.vector2Chesse.ContainsKey(rc))
+    //            if (CalculateUtil.vector2Chess.ContainsKey(rc))
     //            {
-    //                GameObject rcChesse = CalculateUtil.vector2Chesse[new Vector2(rightBorder, currentPos.y)];
+    //                GameObject rcChesse = CalculateUtil.vector2Chess[new Vector2(rightBorder, currentPos.y)];
     //                if (rcChesse != gameObject && rcChesse.GetComponent<ChessCamp>().camp == GetComponent<ChessCamp>().camp)
     //                    rightBorder = rightBorder - 1;
     //            }

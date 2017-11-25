@@ -22,9 +22,9 @@ public class Chess_Xiang : BaseChess
         base.Update();
     }
 
-    public override List<Vector2> CanMovePoints()
+    public override List<Vector2> CanMovePoints(Dictionary<GameObject, Vector2> chess2Vector, Dictionary<Vector2, GameObject> vector2Chess)
     {
-        Vector2 currentPos = CalculateUtil.chesse2Vector[gameObject];
+        Vector2 currentPos = chess2Vector[gameObject];
         List<Vector2> canMovePoints = new List<Vector2>();
 
         //红方，不可过河
@@ -34,25 +34,25 @@ public class Chess_Xiang : BaseChess
             {
                 Vector2 value = new Vector2(currentPos.x + 2, currentPos.y + 2);
                 Vector2 valueEye = new Vector2(currentPos.x + 1, currentPos.y + 1);   //卡象眼的位置
-                JudgeMovePoint(value, valueEye, canMovePoints);
+                JudgeMovePoint(value, valueEye, canMovePoints, vector2Chess);
             }
             if (currentPos.y >= 2 && currentPos.x <= 6) //-45°斜向下走
             {
                 Vector2 value = new Vector2(currentPos.x + 2, currentPos.y - 2);
                 Vector2 valueEye = new Vector2(currentPos.x + 1, currentPos.y - 1);   //卡象眼的位置
-                JudgeMovePoint(value, valueEye, canMovePoints);
+                JudgeMovePoint(value, valueEye, canMovePoints, vector2Chess);
             }
             if (currentPos.y >= 2 && currentPos.x >= 2) //-135°斜向下走
             {
                 Vector2 value = new Vector2(currentPos.x - 2, currentPos.y - 2);
                 Vector2 valueEye = new Vector2(currentPos.x - 1, currentPos.y - 1);   //卡象眼的位置
-                JudgeMovePoint(value, valueEye, canMovePoints);
+                JudgeMovePoint(value, valueEye, canMovePoints, vector2Chess);
             }
             if (currentPos.y <= 2 && currentPos.x >= 2) //135°斜向上走
             {
                 Vector2 value = new Vector2(currentPos.x - 2, currentPos.y + 2);
                 Vector2 valueEye = new Vector2(currentPos.x - 1, currentPos.y + 1);   //卡象眼的位置
-                JudgeMovePoint(value, valueEye, canMovePoints);
+                JudgeMovePoint(value, valueEye, canMovePoints, vector2Chess);
             }
         }
         //黑方，不可过河
@@ -62,25 +62,25 @@ public class Chess_Xiang : BaseChess
             {
                 Vector2 value = new Vector2(currentPos.x + 2, currentPos.y + 2);
                 Vector2 valueEye = new Vector2(currentPos.x + 1, currentPos.y + 1);   //卡象眼的位置
-                JudgeMovePoint(value, valueEye, canMovePoints);
+                JudgeMovePoint(value, valueEye, canMovePoints, vector2Chess);
             }
             if (currentPos.y >= 7 && currentPos.x <= 6) //-45°斜向下走
             {
                 Vector2 value = new Vector2(currentPos.x + 2, currentPos.y - 2);
                 Vector2 valueEye = new Vector2(currentPos.x + 1, currentPos.y - 1);   //卡象眼的位置
-                JudgeMovePoint(value, valueEye, canMovePoints);
+                JudgeMovePoint(value, valueEye, canMovePoints, vector2Chess);
             }
             if (currentPos.y >= 7 && currentPos.x >= 2) //-135°斜向下走
             {
                 Vector2 value = new Vector2(currentPos.x - 2, currentPos.y - 2);
                 Vector2 valueEye = new Vector2(currentPos.x - 1, currentPos.y - 1);   //卡象眼的位置
-                JudgeMovePoint(value, valueEye, canMovePoints);
+                JudgeMovePoint(value, valueEye, canMovePoints, vector2Chess);
             }
             if (currentPos.y <= 7 && currentPos.x >= 2) //135°斜向上走
             {
                 Vector2 value = new Vector2(currentPos.x - 2, currentPos.y + 2);
                 Vector2 valueEye = new Vector2(currentPos.x - 1, currentPos.y + 1);   //卡象眼的位置
-                JudgeMovePoint(value, valueEye, canMovePoints);
+                JudgeMovePoint(value, valueEye, canMovePoints, vector2Chess);
             }
         }
 
@@ -93,11 +93,11 @@ public class Chess_Xiang : BaseChess
     /// </summary>
     /// <param name="value"></param>
     /// <param name="valueEye">象眼位置</param>
-    void JudgeMovePoint(Vector2 value, Vector2 valueEye, List<Vector2> canMovePoints)
+    void JudgeMovePoint(Vector2 value, Vector2 valueEye, List<Vector2> canMovePoints, Dictionary<Vector2, GameObject> vector2Chess)
     {
         if (CalculateUtil.vector2Grids.ContainsKey(valueEye))
         {
-            if (CalculateUtil.vector2Chesse.ContainsKey(valueEye))//若象眼位置存在棋子，那就憋住了
+            if (vector2Chess.ContainsKey(valueEye))//若象眼位置存在棋子，那就憋住了
             {
                 return;
             }
@@ -107,9 +107,9 @@ public class Chess_Xiang : BaseChess
                 if (CalculateUtil.vector2Grids.ContainsKey(value))
                 {
                     //若有棋子
-                    if (CalculateUtil.vector2Chesse.ContainsKey(value))
+                    if (vector2Chess.ContainsKey(value))
                     {
-                        GameObject otherChess = CalculateUtil.vector2Chesse[value];
+                        GameObject otherChess = vector2Chess[value];
                         if (otherChess.GetComponent<ChessCamp>().camp != GetComponent<ChessCamp>().camp)
                             canMovePoints.Add(value);
                     }

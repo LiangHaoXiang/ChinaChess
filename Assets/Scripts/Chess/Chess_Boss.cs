@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public delegate bool DetectBeAttackedEventHandler(); //被将军
+public delegate bool DetectBeAttackedEventHandler(Dictionary<GameObject, Vector2> chess2Vector, Dictionary<Vector2, GameObject> vector2Chess); //被将军
 public class Chess_Boss : BaseChess
 {
     public static event DetectBeAttackedEventHandler DetectBeAttackedEvent;   //被将军事件
@@ -26,7 +26,7 @@ public class Chess_Boss : BaseChess
     /// </summary>
     public static void DetectBeAttacked()
     {
-        DetectBeAttackedEvent();
+        DetectBeAttackedEvent(CalculateUtil.chess2Vector, CalculateUtil.vector2Chess);
     }
     /// <summary>
     /// 被将死
@@ -68,9 +68,9 @@ public class Chess_Boss : BaseChess
         return false;
     }
 
-    public override List<Vector2> CanMovePoints()
+    public override List<Vector2> CanMovePoints(Dictionary<GameObject, Vector2> chess2Vector, Dictionary<Vector2, GameObject> vector2Chess)
     {
-        Vector2 currentPos = CalculateUtil.chesse2Vector[gameObject];
+        Vector2 currentPos = chess2Vector[gameObject];
         List<Vector2> canMovePoints = new List<Vector2>();
 
         if(GetComponent<ChessCamp>().camp == Camp.Red)
@@ -78,12 +78,12 @@ public class Chess_Boss : BaseChess
             if (currentPos.y <= 1)  //可向上走
             {
                 Vector2 value = new Vector2(currentPos.x, currentPos.y + 1);
-                JudgeMovePoint(value, canMovePoints, gameObject);
+                JudgeMovePoint(value, canMovePoints, gameObject, chess2Vector, vector2Chess);
             }
             if (currentPos.y >= 1)  //可向下走
             {
                 Vector2 value = new Vector2(currentPos.x, currentPos.y - 1);
-                JudgeMovePoint(value, canMovePoints, gameObject);
+                JudgeMovePoint(value, canMovePoints, gameObject, chess2Vector, vector2Chess);
             }
         }
         if (GetComponent<ChessCamp>().camp == Camp.Black)
@@ -91,25 +91,25 @@ public class Chess_Boss : BaseChess
             if (currentPos.y <= 8)  //可向上走
             {
                 Vector2 value = new Vector2(currentPos.x, currentPos.y + 1);
-                JudgeMovePoint(value, canMovePoints, gameObject);
+                JudgeMovePoint(value, canMovePoints, gameObject, chess2Vector, vector2Chess);
             }
             if (currentPos.y >= 8)  //可向下走
             {
                 Vector2 value = new Vector2(currentPos.x, currentPos.y - 1);
-                JudgeMovePoint(value, canMovePoints, gameObject);
+                JudgeMovePoint(value, canMovePoints, gameObject, chess2Vector, vector2Chess);
             }
         }
 
         if (currentPos.x <= 4)  //可向右走
         {
             Vector2 value = new Vector2(currentPos.x + 1, currentPos.y);
-            JudgeMovePoint(value, canMovePoints, gameObject);
+            JudgeMovePoint(value, canMovePoints, gameObject, chess2Vector, vector2Chess);
         }
 
         if (currentPos.x >= 4)  //可向左走
         {
             Vector2 value = new Vector2(currentPos.x - 1, currentPos.y);
-            JudgeMovePoint(value, canMovePoints, gameObject);
+            JudgeMovePoint(value, canMovePoints, gameObject, chess2Vector, vector2Chess);
         }
 
         return canMovePoints;
@@ -119,7 +119,7 @@ public class Chess_Boss : BaseChess
     /// 帅/将专属判断是否可以走这个点
     /// </summary>
     /// <param name="value"></param>
-    void JudgeMovePoint(Vector2 value, List<Vector2> canMovePoints, GameObject self)
+    void JudgeMovePoint(Vector2 value, List<Vector2> canMovePoints, GameObject self, Dictionary<GameObject, Vector2> chess2Vector, Dictionary<Vector2, GameObject> vector2Chess)
     {
         GameObject enemyBoss;
         if (self == createManager.GetRedBoss())
@@ -132,14 +132,14 @@ public class Chess_Boss : BaseChess
             //不管value处有没有棋子，先判断value是否和敌方公照面(是否x坐标相同)
             bool existOtherChessOnSame_X_Axis = false;   //在公想要走的位置和对面公的位置之间是否有其他棋子
             //若想要走的位置和对面公同一条竖线，那要判断是否照面
-            if (value.x == CalculateUtil.chesse2Vector[enemyBoss].x)
+            if (value.x == chess2Vector[enemyBoss].x)
             {
-                float enemyBoss_Y = CalculateUtil.chesse2Vector[enemyBoss].y;
+                float enemyBoss_Y = chess2Vector[enemyBoss].y;
                 if (enemyBoss == createManager.GetBlackBoss())
                 {
                     for (int i = (int)value.y + 1; i < enemyBoss_Y; i++)
                     {
-                        if (CalculateUtil.vector2Chesse.ContainsKey(new Vector2(value.x, i)))
+                        if (vector2Chess.ContainsKey(new Vector2(value.x, i)))
                             existOtherChessOnSame_X_Axis = true;
                     }
                 }
@@ -147,16 +147,16 @@ public class Chess_Boss : BaseChess
                 {
                     for (int i = (int)value.y - 1; i > enemyBoss_Y; i--)
                     {
-                        if (CalculateUtil.vector2Chesse.ContainsKey(new Vector2(value.x, i)))
+                        if (vector2Chess.ContainsKey(new Vector2(value.x, i)))
                             existOtherChessOnSame_X_Axis = true;
                     }
                 }
                 if (existOtherChessOnSame_X_Axis)
                 {
                     //判断value位置是否有棋子
-                    if (CalculateUtil.vector2Chesse.ContainsKey(value))
+                    if (vector2Chess.ContainsKey(value))
                     {
-                        GameObject otherChess = CalculateUtil.vector2Chesse[value];
+                        GameObject otherChess = vector2Chess[value];
                         //判断value位置的棋子阵营
                         if (otherChess.GetComponent<ChessCamp>().camp != GetComponent<ChessCamp>().camp)
                             canMovePoints.Add(value);
@@ -168,9 +168,9 @@ public class Chess_Boss : BaseChess
             else
             {
                 //判断value位置是否有棋子
-                if (CalculateUtil.vector2Chesse.ContainsKey(value))
+                if (vector2Chess.ContainsKey(value))
                 {
-                    GameObject otherChess = CalculateUtil.vector2Chesse[value];
+                    GameObject otherChess = vector2Chess[value];
                     //判断value位置的棋子阵营
                     if (otherChess.GetComponent<ChessCamp>().camp != GetComponent<ChessCamp>().camp)
                         canMovePoints.Add(value);

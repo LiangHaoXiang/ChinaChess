@@ -20,9 +20,9 @@ public class Chess_Pao : BaseChess
         base.Update();
     }
 
-    public override List<Vector2> CanMovePoints()
+    public override List<Vector2> CanMovePoints(Dictionary<GameObject, Vector2> chess2Vector, Dictionary<Vector2, GameObject> vector2Chess)
     {
-        Vector2 currentPos = CalculateUtil.chesse2Vector[gameObject];
+        Vector2 currentPos = chess2Vector[gameObject];
         List<Vector2> canMovePoints = new List<Vector2>();
 
         bool findFirstLeftOtherChess = false;
@@ -34,7 +34,7 @@ public class Chess_Pao : BaseChess
         {
             Vector2 value = new Vector2(i, currentPos.y);
             bool findSecondChess = false;
-            JudgeMovePoint(value, ref findFirstLeftOtherChess, ref findSecondChess, canMovePoints);
+            JudgeMovePoint(value, ref findFirstLeftOtherChess, ref findSecondChess, canMovePoints, vector2Chess);
             if (findSecondChess) break;
         }
 
@@ -42,7 +42,7 @@ public class Chess_Pao : BaseChess
         {
             Vector2 value = new Vector2(i, currentPos.y);
             bool findSecondChess = false;
-            JudgeMovePoint(value, ref findFirstRightOtherChess, ref findSecondChess, canMovePoints);
+            JudgeMovePoint(value, ref findFirstRightOtherChess, ref findSecondChess, canMovePoints, vector2Chess);
             if (findSecondChess) break;
         }
 
@@ -50,7 +50,7 @@ public class Chess_Pao : BaseChess
         {
             Vector2 value = new Vector2(currentPos.x, i);
             bool findSecondChess = false;
-            JudgeMovePoint(value, ref findFirstUpOtherChess, ref findSecondChess, canMovePoints);
+            JudgeMovePoint(value, ref findFirstUpOtherChess, ref findSecondChess, canMovePoints, vector2Chess);
             if (findSecondChess) break;
         }
 
@@ -58,7 +58,7 @@ public class Chess_Pao : BaseChess
         {
             Vector2 value = new Vector2(currentPos.x, i);
             bool findSecondChess = false;
-            JudgeMovePoint(value, ref findFirstDownOtherChess, ref findSecondChess, canMovePoints);
+            JudgeMovePoint(value, ref findFirstDownOtherChess, ref findSecondChess, canMovePoints, vector2Chess);
             if (findSecondChess) break;
         }
 
@@ -69,20 +69,20 @@ public class Chess_Pao : BaseChess
     /// 炮专属判断是否可以走这个点
     /// </summary>
     /// <param name="value"></param>
-    void JudgeMovePoint(Vector2 value, ref bool findFirstOtherChess, ref bool findSecondChess, List<Vector2> canMovePoints)
+    void JudgeMovePoint(Vector2 value, ref bool findFirstOtherChess, ref bool findSecondChess, List<Vector2> canMovePoints, Dictionary<Vector2, GameObject> vector2Chess)
     {
         if (findFirstOtherChess == false)    //若还没找到第一个棋子，就让他继续找
         {
-            if (CalculateUtil.vector2Chesse.ContainsKey(value))
+            if (vector2Chess.ContainsKey(value))
                 findFirstOtherChess = true;
             else
                 canMovePoints.Add(value);
         }
         else//找到了第一个棋子后，就找第二个
         {
-            if (CalculateUtil.vector2Chesse.ContainsKey(value))//找到第二个且是敌方棋子，那就可以杀
+            if (vector2Chess.ContainsKey(value))//找到第二个且是敌方棋子，那就可以杀
             {
-                GameObject targetChess = CalculateUtil.vector2Chesse[value];
+                GameObject targetChess = vector2Chess[value];
                 if (targetChess.GetComponent<ChessCamp>().camp != GetComponent<ChessCamp>().camp)
                     canMovePoints.Add(value);
                 findSecondChess = true;

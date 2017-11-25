@@ -22,9 +22,9 @@ public class Chess_Zu : BaseChess
         base.Update();
     }
 
-    public override List<Vector2> CanMovePoints()
+    public override List<Vector2> CanMovePoints(Dictionary<GameObject, Vector2> chess2Vector, Dictionary<Vector2, GameObject> vector2Chess)
     {
-        Vector2 currentPos = CalculateUtil.chesse2Vector[gameObject];
+        Vector2 currentPos = chess2Vector[gameObject];
         List<Vector2> canMovePoints = new List<Vector2>();
 
         //若是红方且过了河 或是 黑方且过了河，就能左右走
@@ -32,23 +32,23 @@ public class Chess_Zu : BaseChess
             (GetComponent<ChessCamp>().camp == Camp.Black && currentPos.y <= 4))
         {
             Vector2 valueLeft = new Vector2(currentPos.x - 1, currentPos.y);
-            JudgeMovePoint(valueLeft, canMovePoints);
+            JudgeMovePoint(valueLeft, canMovePoints, vector2Chess);
 
             Vector2 valueRight = new Vector2(currentPos.x + 1, currentPos.y);
-            JudgeMovePoint(valueRight, canMovePoints);
+            JudgeMovePoint(valueRight, canMovePoints, vector2Chess);
         }
 
         //若是红方，只能向上走。
         if (GetComponent<ChessCamp>().camp == Camp.Red)
         {
             Vector2 valueUp = new Vector2(currentPos.x, currentPos.y + 1);
-            JudgeMovePoint(valueUp, canMovePoints);
+            JudgeMovePoint(valueUp, canMovePoints, vector2Chess);
         }
         //若是黑方，只能向下走
         if (GetComponent<ChessCamp>().camp == Camp.Black)
         {
             Vector2 valueDown = new Vector2(currentPos.x, currentPos.y - 1);
-            JudgeMovePoint(valueDown, canMovePoints);
+            JudgeMovePoint(valueDown, canMovePoints, vector2Chess);
         }
 
         return canMovePoints;
@@ -58,13 +58,13 @@ public class Chess_Zu : BaseChess
     /// 兵专属判断是否可以走这个点
     /// </summary>
     /// <param name="value"></param>
-    void JudgeMovePoint(Vector2 value, List<Vector2> canMovePoints)
+    void JudgeMovePoint(Vector2 value, List<Vector2> canMovePoints, Dictionary<Vector2, GameObject> vector2Chess)
     {
         if (CalculateUtil.vector2Grids.ContainsKey(value))
         {
-            if (CalculateUtil.vector2Chesse.ContainsKey(value))
+            if (vector2Chess.ContainsKey(value))
             {
-                GameObject otherChess = CalculateUtil.vector2Chesse[value];
+                GameObject otherChess = vector2Chess[value];
                 if (otherChess.GetComponent<ChessCamp>().camp != GetComponent<ChessCamp>().camp)
                     canMovePoints.Add(value);
             }
