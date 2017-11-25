@@ -249,4 +249,199 @@ public class CalculateUtil : MonoBehaviour
             PoolManager.Take(chess);    //被吃的棋子从回收区提取回来
         chess.transform.position = vector2Grids[point].transform.position;
     }
+    /// <summary>
+    /// 假设棋子移动到某点后，棋局的状态
+    /// </summary>
+    /// <param name="chess">某棋子</param>
+    /// <param name="point">移动到某点</param>
+    /// <returns>返回第一个元素为assumptionChesse2Vector，第二个元素为assumptionVector2Chesse</returns>
+    public static ArrayList MoveAssumption(GameObject chess,Vector2 point)
+    {
+        ArrayList arrList = new ArrayList(2);
+        #region 先记录好此时棋局信息，到时候可回到原状态
+        Dictionary<GameObject, Vector2> originChesse2Vector = new Dictionary<GameObject, Vector2>();
+        Dictionary<Vector2, GameObject> originVector2Chesse = new Dictionary<Vector2, GameObject>();
+        foreach (KeyValuePair<GameObject, Vector2> kvp in chesse2Vector)
+            originChesse2Vector.Add(kvp.Key, kvp.Value);
+        foreach (KeyValuePair<Vector2, GameObject> kvp in vector2Chesse)
+            originVector2Chesse.Add(kvp.Key, kvp.Value);
+        #endregion
+        #region 开始假设
+        Dictionary<GameObject, Vector2> assumptionChesse2Vector = new Dictionary<GameObject, Vector2>();
+        Dictionary<Vector2, GameObject> assumptionVector2Chesse = new Dictionary<Vector2, GameObject>();
+
+        foreach(KeyValuePair<GameObject,Vector2> kvp in chesse2Vector)
+        {
+            if (chess == kvp.Key)
+                assumptionChesse2Vector.Add(kvp.Key, point);    //假设这个棋子移动到point点处
+            else
+                assumptionChesse2Vector.Add(kvp.Key, kvp.Value);
+        }
+        foreach(KeyValuePair<Vector2,GameObject> kvp in vector2Chesse)
+        {
+            if (chess == kvp.Value)
+                assumptionVector2Chesse.Add(point, kvp.Value);
+            else
+                assumptionVector2Chesse.Add(kvp.Key, kvp.Value);
+        }
+        #endregion
+        chesse2Vector = originChesse2Vector;//计算完让他回到原来状态
+        vector2Chesse = originVector2Chesse;
+
+        arrList.Add(assumptionChesse2Vector);
+        arrList.Add(assumptionVector2Chesse);
+        return arrList;
+    }
+
+    /// <summary>
+    /// 获取当前棋局黑棋所有走法后的棋局信息//未修改
+    /// </summary>
+    public static List<Vector2> GetAllBlackMoves_Maps()
+    {
+        List<Vector2> allMoves = new List<Vector2>();
+        CreateManager cm = CreateManager.Instance;
+
+        //黑将的所有走法
+        if (cm.blackBoss.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.blackBoss.GetComponent<Chess_Boss>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.blackBoss.GetComponent<Chess_Boss>().CanMovePoints()[i]);
+        //黑车1的所有走法
+        if (cm.b_Ju1.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.b_Ju1.GetComponent<Chess_Ju>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.b_Ju1.GetComponent<Chess_Ju>().CanMovePoints()[i]);
+        //黑车2的所有走法
+        if (cm.b_Ju2.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.b_Ju2.GetComponent<Chess_Ju>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.b_Ju2.GetComponent<Chess_Ju>().CanMovePoints()[i]);
+        //黑马1的所有走法
+        if (cm.b_Ma1.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.b_Ma1.GetComponent<Chess_Ma>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.b_Ma1.GetComponent<Chess_Ma>().CanMovePoints()[i]);
+        //黑马2的所有走法
+        if (cm.b_Ma2.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.b_Ma2.GetComponent<Chess_Ma>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.b_Ma2.GetComponent<Chess_Ma>().CanMovePoints()[i]);
+        //黑炮1的所有走法
+        if (cm.b_Pao1.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.b_Pao1.GetComponent<Chess_Pao>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.b_Pao1.GetComponent<Chess_Pao>().CanMovePoints()[i]);
+        //黑炮2的所有走法
+        if (cm.b_Pao2.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.b_Pao2.GetComponent<Chess_Pao>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.b_Pao2.GetComponent<Chess_Pao>().CanMovePoints()[i]);
+        //黑士1的所有走法
+        if (cm.b_Shi1.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.b_Shi1.GetComponent<Chess_Shi>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.b_Shi1.GetComponent<Chess_Shi>().CanMovePoints()[i]);
+        //黑士2的所有走法
+        if (cm.b_Shi2.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.b_Shi2.GetComponent<Chess_Shi>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.b_Shi2.GetComponent<Chess_Shi>().CanMovePoints()[i]);
+        //黑象1的所有走法
+        if (cm.b_Xiang1.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.b_Xiang1.GetComponent<Chess_Xiang>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.b_Xiang1.GetComponent<Chess_Xiang>().CanMovePoints()[i]);
+        //黑象2的所有走法
+        if (cm.b_Xiang2.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.b_Xiang2.GetComponent<Chess_Xiang>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.b_Xiang2.GetComponent<Chess_Xiang>().CanMovePoints()[i]);
+        //黑卒1的所有走法
+        if (cm.b_Bing1.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.b_Bing1.GetComponent<Chess_Zu>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.b_Bing1.GetComponent<Chess_Zu>().CanMovePoints()[i]);
+        //黑卒2的所有走法
+        if (cm.b_Bing2.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.b_Bing2.GetComponent<Chess_Zu>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.b_Bing2.GetComponent<Chess_Zu>().CanMovePoints()[i]);
+        //黑卒3的所有走法
+        if (cm.b_Bing3.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.b_Bing3.GetComponent<Chess_Zu>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.b_Bing3.GetComponent<Chess_Zu>().CanMovePoints()[i]);
+        //黑卒4的所有走法
+        if (cm.b_Bing4.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.b_Bing4.GetComponent<Chess_Zu>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.b_Bing4.GetComponent<Chess_Zu>().CanMovePoints()[i]);
+        //黑卒5的所有走法
+        if (cm.b_Bing5.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.b_Bing5.GetComponent<Chess_Zu>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.b_Bing5.GetComponent<Chess_Zu>().CanMovePoints()[i]);
+
+        return allMoves;
+    }
+    /// <summary>
+    /// 获取当前棋局红棋所有走法后的棋局信息//未修改
+    /// </summary>
+    /// <returns></returns>
+    public static List<Vector2> GetAllRedMoves_Maps()
+    {
+        List<Vector2> allMoves = new List<Vector2>();
+        CreateManager cm = CreateManager.Instance;
+
+        //红将的所有走法
+        if (cm.redBoss.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.blackBoss.GetComponent<Chess_Boss>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.blackBoss.GetComponent<Chess_Boss>().CanMovePoints()[i]);
+        //红车1的所有走法
+        if (cm.r_Ju1.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.r_Ju1.GetComponent<Chess_Ju>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.r_Ju1.GetComponent<Chess_Ju>().CanMovePoints()[i]);
+        //红车2的所有走法
+        if (cm.r_Ju2.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.r_Ju2.GetComponent<Chess_Ju>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.r_Ju2.GetComponent<Chess_Ju>().CanMovePoints()[i]);
+        //红马1的所有走法
+        if (cm.r_Ma1.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.r_Ma1.GetComponent<Chess_Ma>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.r_Ma1.GetComponent<Chess_Ma>().CanMovePoints()[i]);
+        //红马2的所有走法
+        if (cm.r_Ma2.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.r_Ma2.GetComponent<Chess_Ma>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.r_Ma2.GetComponent<Chess_Ma>().CanMovePoints()[i]);
+        //红炮1的所有走法
+        if (cm.r_Pao1.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.r_Pao1.GetComponent<Chess_Pao>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.r_Pao1.GetComponent<Chess_Pao>().CanMovePoints()[i]);
+        //红炮2的所有走法
+        if (cm.r_Pao2.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.r_Pao2.GetComponent<Chess_Pao>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.r_Pao2.GetComponent<Chess_Pao>().CanMovePoints()[i]);
+        //红仕1的所有走法
+        if (cm.r_Shi1.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.r_Shi1.GetComponent<Chess_Shi>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.r_Shi1.GetComponent<Chess_Shi>().CanMovePoints()[i]);
+        //红仕2的所有走法
+        if (cm.r_Shi2.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.r_Shi2.GetComponent<Chess_Shi>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.r_Shi2.GetComponent<Chess_Shi>().CanMovePoints()[i]);
+        //红象1的所有走法
+        if (cm.r_Xiang1.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.r_Xiang1.GetComponent<Chess_Xiang>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.r_Xiang1.GetComponent<Chess_Xiang>().CanMovePoints()[i]);
+        //红象2的所有走法
+        if (cm.r_Xiang2.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.r_Xiang2.GetComponent<Chess_Xiang>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.r_Xiang2.GetComponent<Chess_Xiang>().CanMovePoints()[i]);
+        //红兵1的所有走法
+        if (cm.r_Bing1.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.r_Bing1.GetComponent<Chess_Zu>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.r_Bing1.GetComponent<Chess_Zu>().CanMovePoints()[i]);
+        //红兵2的所有走法
+        if (cm.r_Bing2.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.r_Bing2.GetComponent<Chess_Zu>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.r_Bing2.GetComponent<Chess_Zu>().CanMovePoints()[i]);
+        //红兵3的所有走法
+        if (cm.r_Bing3.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.r_Bing3.GetComponent<Chess_Zu>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.r_Bing3.GetComponent<Chess_Zu>().CanMovePoints()[i]);
+        //红兵4的所有走法
+        if (cm.r_Bing4.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.r_Bing4.GetComponent<Chess_Zu>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.r_Bing4.GetComponent<Chess_Zu>().CanMovePoints()[i]);
+        //红兵5的所有走法
+        if (cm.r_Bing5.parent == PoolManager.workChesses)
+            for (int i = 0; i < cm.r_Bing5.GetComponent<Chess_Zu>().CanMovePoints().Count; i++)
+                allMoves.Add(cm.r_Bing5.GetComponent<Chess_Zu>().CanMovePoints()[i]);
+
+        return allMoves;
+    }
 }
