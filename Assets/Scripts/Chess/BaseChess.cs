@@ -48,17 +48,17 @@ public abstract class BaseChess : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Move(CalculateUtil.chess2Vector, CalculateUtil.vector2Chess);
+            Move();
         }
     }
     /// <summary>
-    /// 移动
+    /// 通过鼠标点击来移动
     /// </summary>
-    public void Move(Dictionary<GameObject, Vector2> chess2Vector, Dictionary<Vector2, GameObject> vector2Chess)
+    public void Move()
     {
         if (chessReciprocalState == ChessReciprocalState.beChoosed)
         {
-            Vector2[] canMovePoints = CanMovePoints(chess2Vector, vector2Chess).ToArray();
+            Vector2[] canMovePoints = CanMovePoints(CalculateUtil.chess2Vector, CalculateUtil.vector2Chess).ToArray();
             Vector3[] canMoveGrids = new Vector3[canMovePoints.Length];
             for (int i = 0; i < canMoveGrids.Length; i++)   //将所有可移动的二维坐标转化成网格点三维坐标
             {
@@ -74,9 +74,9 @@ public abstract class BaseChess : MonoBehaviour
                         canMoveGrids[i].y - 27.5 <= Input.mousePosition.y && Input.mousePosition.y <= canMoveGrids[i].y + 27.5)
                     {
                         //若点击位置存在其他棋子 且 是敌方棋子，那就是吃
-                        if (vector2Chess.ContainsKey(canMovePoints[i]))
+                        if (CalculateUtil.vector2Chess.ContainsKey(canMovePoints[i]))
                         {
-                            GameObject otherChess = vector2Chess[canMovePoints[i]];
+                            GameObject otherChess = CalculateUtil.vector2Chess[canMovePoints[i]];
                             if (otherChess.GetComponent<ChessCamp>().camp != GetComponent<ChessCamp>().camp)
                             {
                                 EatEvent(otherChess);   //吃
@@ -96,6 +96,37 @@ public abstract class BaseChess : MonoBehaviour
             else
             {
                 CancelChoose();
+            }
+        }
+    }
+
+    /// <summary>
+    /// 通过AI来移动
+    /// </summary>
+    /// <param name="chess2Vector"></param>
+    /// <param name="vector2Chess"></param>
+    /// <param name="target">移动的目标位置</param>
+    /// <param name="realMove">是真的移动还是假设移动？</param>
+    public void Move(Dictionary<GameObject, Vector2> chess2Vector, Dictionary<Vector2, GameObject> vector2Chess, Vector2 target, bool realMove)
+    {
+        Vector2[] canMovePoints = CanMovePoints(chess2Vector, vector2Chess).ToArray();
+        //真正的移动
+        if (realMove)
+        {
+
+        }
+        else//假设移动
+        {
+            for (int i = 0; i < canMovePoints.Length; i++)
+            {
+                if (target == canMovePoints[i])
+                {
+                    //假设移动完后，获取移动后的棋局状况 然后再检测有没有将军
+                    ArrayList moveAssumptionData = CalculateUtil.MoveAssumption(gameObject, target);
+                    //这里假设后的检测将军需要检测是否是我方受将军，是则不允许这么走
+                    //.......TODO
+                    Chess_Boss.DetectBeAttacked((Dictionary<GameObject, Vector2>)moveAssumptionData[0], (Dictionary<Vector2, GameObject>)moveAssumptionData[1]);
+                }
             }
         }
     }

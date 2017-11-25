@@ -76,7 +76,7 @@ public class GameController : MonoBehaviour
 
         UpdateChessGame();
         ResetChessReciprocalStateEvent();
-        Chess_Boss.DetectBeAttacked();
+        Chess_Boss.DetectBeAttacked(CalculateUtil.chess2Vector, CalculateUtil.vector2Chess);
     }
     /// <summary>
     /// 悔棋点击事件
@@ -93,7 +93,7 @@ public class GameController : MonoBehaviour
             maps.RemoveRange(maps.Count - 2, 2);
             CalculateUtil.UpdateChessData();
             ResetChessReciprocalStateEvent();
-            Chess_Boss.DetectBeAttacked();
+            Chess_Boss.DetectBeAttacked(CalculateUtil.chess2Vector, CalculateUtil.vector2Chess);
         }
         else
         {

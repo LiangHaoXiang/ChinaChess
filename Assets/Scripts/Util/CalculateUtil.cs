@@ -272,6 +272,11 @@ public class CalculateUtil : MonoBehaviour
         Dictionary<GameObject, Vector2> assumptionChesse2Vector = new Dictionary<GameObject, Vector2>();
         Dictionary<Vector2, GameObject> assumptionVector2Chesse = new Dictionary<Vector2, GameObject>();
 
+        if (chess2Vector.ContainsKey(chess))    //若要走的点存在棋子，也就会吃了，先将他移除映射
+            chess2Vector.Remove(chess);
+        if (vector2Chess.ContainsKey(point))    //若要走的点存在棋子，也就会吃了，先将他移除映射
+            vector2Chess.Remove(point);
+
         foreach(KeyValuePair<GameObject,Vector2> kvp in chess2Vector)
         {
             if (chess == kvp.Key)
@@ -282,11 +287,14 @@ public class CalculateUtil : MonoBehaviour
         foreach(KeyValuePair<Vector2,GameObject> kvp in vector2Chess)
         {
             if (chess == kvp.Value)
+            {
                 assumptionVector2Chesse.Add(point, kvp.Value);
+            }
             else
                 assumptionVector2Chesse.Add(kvp.Key, kvp.Value);
         }
         #endregion
+
         chess2Vector = originChesse2Vector;//计算完让他回到原来状态
         vector2Chess = originVector2Chesse;
 

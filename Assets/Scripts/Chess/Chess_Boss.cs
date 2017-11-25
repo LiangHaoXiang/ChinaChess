@@ -24,12 +24,12 @@ public class Chess_Boss : BaseChess
     /// <summary>
     /// 检测是否被将军
     /// </summary>
-    public static void DetectBeAttacked()
+    public static void DetectBeAttacked(Dictionary<GameObject, Vector2> chess2Vector, Dictionary<Vector2, GameObject> vector2Chess)
     {
-        DetectBeAttackedEvent(CalculateUtil.chess2Vector, CalculateUtil.vector2Chess);
+        DetectBeAttackedEvent(chess2Vector, vector2Chess);
     }
     /// <summary>
-    /// 被将死
+    /// 被将死，换言之，无论怎么走都无法改变被将军的状态。
     /// </summary>
     public bool NoWayOut()
     {
