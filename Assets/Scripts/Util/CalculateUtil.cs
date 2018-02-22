@@ -6,12 +6,12 @@ using UnityEngine;
 /// </summary>
 public class CalculateUtil : MonoBehaviour
 {
-    public static Vector3[,] grids;
+    public static Vector2[,] grids;
     public static Vector2[,] points;
     /// <summary>
     /// 场景grids或棋子与平面直角坐标(x方向0-8，y方向0-9)之间的映射关系
     /// </summary>
-    public static Dictionary<Vector3, Vector2> coords;
+    public static Dictionary<Vector2, Vector2> coords;
     /// <summary>
     /// 二维坐标与场景中的网格点物体的映射
     /// </summary>
@@ -27,13 +27,14 @@ public class CalculateUtil : MonoBehaviour
 
     void Awake()
     {
+        Transform gridParent = GameObject.Find("Grids").transform;
         //初始化场景网格点，获取场景中的每个排列好的网格点
-        grids = new Vector3[10, 9];
+        grids = new Vector2[10, 9];
         for (int i = 0; i < 10; i++)
         {
             for (int j = 0; j < 9; j++)
             {
-                grids[i, j] = GameObject.Find("Grids").transform.GetChild((9 - i) * 9 + j).position;
+                grids[i, j] = gridParent.GetChild((9 - i) * 9 + j).GetComponent<RectTransform>().anchoredPosition;
             }
         }
         //初始化平面直角坐标系的二维坐标点
@@ -45,8 +46,8 @@ public class CalculateUtil : MonoBehaviour
                 points[i, j] = new Vector2(j, i);//坐标和二维数组不同
             }
         }
-        //初始化坐标映射字典，将场景中的网格点分别对应于二维坐标点
-        coords = new Dictionary<Vector3, Vector2>();
+        //初始化坐标映射字典，将场景中的网格点分别对应于自定义的二维坐标点
+        coords = new Dictionary<Vector2, Vector2>();
         for (int i = 0; i < 10; i++)  //行
         {
             for (int j = 0; j < 9; j++) //列
@@ -60,7 +61,7 @@ public class CalculateUtil : MonoBehaviour
         {
             for (int j = 0; j < 9; j++)
             {
-                vector2Grids.Add(points[i, j], GameObject.Find("Grids").transform.GetChild((9 - i) * 9 + j).gameObject);
+                vector2Grids.Add(points[i, j], gridParent.GetChild((9 - i) * 9 + j).gameObject);
             }
         }
 
@@ -74,7 +75,7 @@ public class CalculateUtil : MonoBehaviour
     /// <returns></returns>
     public static void UpdateChessData()
     {
-        if (chess2Vector != null && vector2Chess != null)
+        if (chess2Vector != null || vector2Chess != null)
         {
             chess2Vector.Clear();
             vector2Chess.Clear();
@@ -82,8 +83,11 @@ public class CalculateUtil : MonoBehaviour
 
         for (int i = 0; i < PoolManager.work_List.Count; i++)
         {
-            chess2Vector.Add(PoolManager.work_List[i], coords[PoolManager.work_List[i].transform.position]);
-            vector2Chess.Add(coords[PoolManager.work_List[i].transform.position], PoolManager.work_List[i]);
+            Vector2 rectPos = new Vector2();
+            rectPos = PoolManager.work_List[i].GetComponent<RectTransform>().anchoredPosition;
+            Debug.Log("coords[rectPos] = " + coords[rectPos]);
+            chess2Vector.Add(PoolManager.work_List[i], coords[rectPos]);
+            vector2Chess.Add(coords[rectPos], PoolManager.work_List[i]);
         }
     }
     #region 先注释

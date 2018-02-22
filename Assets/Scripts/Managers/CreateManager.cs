@@ -153,7 +153,8 @@ public class CreateManager : MonoBehaviour
         Vector2 point = new Vector2(point_X, point_Y);
         GameObject go = Instantiate(prefab);
         PoolManager.Push(go);   //放入池工作区进行管理
-        go.transform.position = CalculateUtil.vector2Grids[point].transform.position;
+        go.GetComponent<RectTransform>().anchoredPosition = CalculateUtil.vector2Grids[point].GetComponent<RectTransform>().anchoredPosition;
+        //go.transform.position = CalculateUtil.vector2Grids[point].transform.position;
         return go.transform;
     }
 
